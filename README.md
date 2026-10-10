@@ -2,6 +2,8 @@
 
 Materials for my PhD oral defense at the National University of Singapore (NUS), titled **“Machine Learning Augmented Simulation and Analysis of Dynamical Systems.”**
 
+The final thesis is publicly available through [NUS ScholarBank](https://scholarbank.nus.edu.sg/entities/publication/e1cd8b5f-5f69-47c3-8b60-1e0e46c86ed3).
+
 The presentation explores how machine learning can enhance scientific computing while preserving mathematical structure, through three themes:
 
 - learning representations with parametric Koopman operators;
@@ -13,7 +15,7 @@ The presentation explores how machine learning can enhance scientific computing 
 - [`slides/index.html`](slides/index.html) — interactive Reveal.js presentation
 - [`slides/PhD_Oral_Defense_GuoYue.pdf`](slides/PhD_Oral_Defense_GuoYue.pdf) — exported slide deck
 - [`slides/speaker_script.md`](slides/speaker_script.md) — bilingual Chinese–English speaker notes
-- [`slides/img/`](slides/img/) — figures, photos, and video assets
+- [`slides/img/`](slides/img/) — figures and video assets
 
 ## View the slides
 

@@ -1,0 +1,2373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PhD Oral Defense — Guo Yue</title>
+
+  <!-- reveal.js core + theme (CDN) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/white.css" id="theme">
+
+  <style>
+    :root{
+      --accent:#1f6f78;      /* teal */
+      --accent2:#5b4ea8;     /* purple */
+      --ink:#22303a;
+      --muted:#5d6b75;
+    }
+    .reveal { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; color: var(--ink); }
+    .reveal h1,.reveal h2,.reveal h3 { color: var(--accent); font-weight: 700; letter-spacing:-.01em; text-transform:none; }
+    .reveal h1 { font-size: 1.85em; line-height:1.15; }
+    .reveal h2 { font-size: 1.35em; margin-bottom:.4em; }
+    .reveal h3 { font-size: 1.0em; color: var(--accent2); }
+    .reveal section { text-align: left; }
+    /* extra breathing room at the top of content slides */
+    .reveal .slides > section:not(.center) { padding-top: 2.5%; }
+    /* with center:false all slides top-align (titles line up across slides);
+       re-center only the cover & conclusion, which use class="center" */
+    .reveal .slides > section.center {
+      height: 100%;
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    /* cover keeps its own look: extra whitespace above the title block */
+    .reveal .slides > section.title-slide { padding-top: 10%; }
+    /* custom page number pinned to the bottom-left of the viewport */
+    #pagenum {
+      position: fixed;
+      left: 26px;
+      bottom: 18px;
+      z-index: 30;
+      color: var(--muted);
+      font-size: 16px;
+      font-weight: 600;
+    }
+    #pagenum.hidden { display: none; }
+    .reveal ul { display:block; }
+    .reveal li { margin: .18em 0; line-height:1.35; }
+    /* balance wrapped lines so no single-word orphan line, and centered text reads evenly */
+    .reveal p, .reveal .box, .reveal .cap { text-wrap: balance; }
+    .reveal em { color: var(--accent2); font-style: normal; font-weight:600; }
+    .reveal strong { color: var(--accent); }
+
+    .center { text-align:center; }
+    .muted { color: var(--muted); }
+    .small { font-size: .72em; }
+    .xsmall { font-size: .6em; }
+    .tag {
+      display:inline-block; background:var(--accent); color:#fff; border-radius:6px;
+      padding:2px 10px; font-size:.5em; vertical-align:middle; margin-left:.4em; font-weight:600;
+    }
+    .tag.alt { background: var(--accent2); }
+    .kicker { color:var(--accent2); font-weight:700; font-size:.62em; letter-spacing:.08em; text-transform:uppercase; margin-bottom:.2em; }
+
+    /* image helpers */
+    .reveal img.fig { background:#fff; border-radius:8px; box-shadow:0 2px 14px rgba(0,0,0,.12); }
+    .frame { background:#fff; border-radius:8px; box-shadow:0 2px 14px rgba(0,0,0,.12); padding:6px; }
+    .row { display:flex; gap:24px; align-items:center; }
+    .row.top { align-items:flex-start; }
+    .col { flex:1; min-width:0; }
+    .cap { font-size:.5em; color:var(--muted); text-align:center; margin-top:4px; }
+    .trajectory-grid {
+      display:grid; grid-template-columns:repeat(2, minmax(0, 1fr));
+      gap:9px; width:100%;
+    }
+    .trajectory-tile { min-width:0; }
+    .trajectory-video {
+      display:block; width:100%; aspect-ratio:3 / 2; object-fit:contain;
+      background:#fff; border-radius:8px; box-shadow:0 2px 14px rgba(0,0,0,.12);
+    }
+    .trajectory-tile.ours .trajectory-video { box-shadow:0 0 0 2px rgba(31,111,120,.35), 0 2px 14px rgba(0,0,0,.12); }
+    .trajectory-tile .cap { font-size:.42em; line-height:1.15; margin-top:3px; }
+    .molecular-results { align-items:center; gap:20px; }
+    .molecular-videos { flex:1.3; }
+    .molecular-plot { flex:1; }
+    .molecular-plot img.fig {
+      display:block; width:100%; max-height:430px; object-fit:contain; margin:0 auto;
+    }
+    .c2h6-metric-slide { align-items:flex-start; gap:20px; }
+    .c2h6-metric-figure { flex:.95; }
+    .c2h6-metric-table { flex:1.05; }
+    .c2h6-metric-figure img.fig {
+      width:100%; max-height:540px; object-fit:contain; display:block; margin:0 auto;
+    }
+    .reveal table.c2h6-table {
+      width:100%; font-size:.36em; margin:.1em 0 0; line-height:1.12;
+    }
+    .reveal table.c2h6-table th { padding:5px 6px; }
+    .reveal table.c2h6-table td { padding:4px 6px; text-align:center; white-space:nowrap; }
+    .reveal table.c2h6-table td.method { text-align:left; }
+    .reveal table.c2h6-table tr.group-start td { border-top:2px solid #cfdadc; }
+    .reveal table.c2h6-table tr.highlight td { background:#e0dbf2 !important; font-weight:700; }
+    .table-note { font-size:.42em; color:var(--muted); margin-top:.35em; text-align:center; }
+    .metric-formula {
+      margin-top:.35em; padding:.3em .55em; border-left:5px solid var(--accent2);
+      background:#f0edf8; border-radius:6px;
+    }
+    .reveal .metric-formula mjx-container[display="true"] {
+      font-size:.54em !important; margin:.08em 0 !important;
+    }
+
+    /* boxes */
+    .box { border-left:6px solid var(--accent); background:#d6e8e9; padding:.5em .9em; border-radius:6px; }
+    .box.alt { border-color:var(--accent2); background:#e0dbf2; }
+
+    /* keep MathJax formulas from overflowing — scale display math down a bit */
+    .reveal mjx-container[display="true"] { font-size:.9em !important; margin:.25em 0 !important; }
+    .reveal .box mjx-container[display="true"] { font-size:.82em !important; }
+    /* match inline math inside a box to the display-math size (.82em) for consistency */
+    .reveal .box mjx-container:not([display="true"]) { font-size:.82em !important; }
+    /* opt-in: make a non-box line's inline math match the in-box math size */
+    .reveal .mfit mjx-container:not([display="true"]) { font-size:.82em !important; }
+    .reveal .box.mini mjx-container[display="true"] { font-size:.72em !important; }
+    .reveal .smallfml mjx-container[display="true"] { font-size:.7em !important; }
+    .reveal .lossfml mjx-container[display="true"] { font-size:.60em !important; }
+    /* click-to-reveal steps via a local button (independent of slide navigation) */
+    .clicksteps .step { opacity:0; transition:opacity .25s ease; }
+    .clicksteps .step.shown { opacity:1; }
+    .stepbtn {
+      font-family:inherit; font-size:.5em; font-weight:600; cursor:pointer;
+      background:var(--accent); color:#fff; border:none; border-radius:6px;
+      padding:.4em 1em; margin:.4em 0 .1em;
+    }
+    .stepbtn:hover { filter:brightness(1.08); }
+    .stepbtn.done { background:#9fb3b6; cursor:default; }
+    /* no-number focus pages: center the diagram in the whole slide */
+    .reveal .slides > section.nonum {
+      height:720px; display:flex !important; flex-direction:column;
+      justify-content:center; align-items:center; padding:0;
+    }
+    .reveal mjx-container { max-width:100%; }
+    .pill { display:inline-block; padding:.1em .5em; border-radius:5px; background:#eef4f4; font-size:.8em; }
+
+    /* table */
+    .reveal table { font-size:.62em; border-collapse:collapse; margin:.3em auto; }
+    .reveal table th { background:var(--accent); color:#fff; padding:7px 12px; }
+    .reveal table td { padding:6px 12px; border-bottom:1px solid #dfe6e9; }
+    .reveal table tr:nth-child(even) td { background:#f7fafa; }
+    .reveal table .ours td { background:#bfe9a6 !important; font-weight:600; }
+    /* compact comparison table (PK-NN) — a touch smaller, fills the column */
+    .reveal table.compact { font-size:.5em; width:96%; margin:.6em 0 0; }
+    .reveal table.compact th { padding:7px 12px; }
+    .reveal table.compact td { padding:6px 12px; }
+    /* term-by-term matching table (classical RK order conditions) */
+    .reveal table.match { font-size:.5em; width:100%; margin:.15em auto 0; }
+    .reveal table.match th { padding:3px 9px; font-weight:700; line-height:1.1; }
+    .reveal table.match td { padding:3px 9px; text-align:center; }
+    .reveal table.match td.term { text-align:left; }
+    .reveal table.match tr:nth-child(even) td { background:#f4f9f9; }
+    /* the two coefficients being equated get a teal wash; the resulting equation a purple wash */
+    .reveal table.match td.tc { background:#e6f1f1; }
+    .reveal table.match td.eq { background:#e0dbf2; font-weight:700; color:var(--ink); }
+    .reveal table.match .eqhead { background:var(--accent2); }
+    .reveal table.match .matchhead { background:#2f8a92; }
+
+    .threecol { display:flex; gap:16px; }
+    .threecol .c { flex:1; background:#f7fafa; border-radius:8px; padding:.6em .8em; border-top:4px solid var(--accent); }
+    .threecol .c.b { border-top-color:#d98c1f; }
+    .threecol .c.c3 { border-top-color:var(--accent2); }
+    .threecol h3 { margin:.1em 0 .3em; }
+
+    /* icon cards (used on the layers slide) */
+    .iconcards { display:flex; gap:18px; align-items:stretch; }
+    .iconcards .ic {
+      flex:1; background:#f7fafa; border-radius:12px; padding:.7em .85em;
+      text-align:center; border-top:4px solid var(--accent);
+      box-shadow:0 2px 10px rgba(0,0,0,.06);
+    }
+    .iconcards .ic.b  { border-top-color:#d98c1f; }
+    .iconcards .ic.c3 { border-top-color:var(--accent2); }
+    .iconcards .ic h3 { margin:.1em 0 .3em; font-size:.82em; white-space:nowrap; }
+    .iconcards .ic p { margin:0; font-size:.8em; color:#000; line-height:1.3; }
+    .iconcards .ic .glyph { width:42px; height:42px; margin:0 auto .25em; display:block; }
+    /* Classical-pipelines slide only: slightly taller cards (capped to avoid overflow) */
+    #cards-pipelines .ic { padding:.85em .9em; }
+    #cards-pipelines .ic h3 { font-size:.85em; margin:.2em 0 .3em; }
+    #cards-pipelines .ic .glyph { width:46px; height:46px; margin-bottom:.3em; }
+    #cards-pipelines .ic p { font-size:.84em; line-height:1.4; }
+
+    .footer { position:absolute; bottom:8px; left:24px; font-size:12px; color:var(--muted); }
+    .reveal .title-slide h1 {
+      color:var(--ink); margin:.2em auto; text-wrap:balance;
+      font-size:1.7em;
+    }
+    .badge-row { margin-top:1em; font-size:.5em; color:var(--muted); }
+
+    /* cover — light polish on the original left-aligned layout */
+    .title-slide .cover-rule { width:361px; height:4px; margin:.7em 0 0; border-radius:3px;
+      background:linear-gradient(90deg,var(--accent),var(--accent2)); }
+    .title-slide .cover-info { margin-top:1.05em; font-size:.8em; line-height:1.25; }
+    .title-slide .cover-info p { margin:.42em 0 0; color:var(--ink); }
+    .title-slide .cover-info p:first-child { margin-top:0; }
+    .title-slide .cover-info .lbl { color:var(--muted); font-weight:600; }
+    .title-slide .cover-info .dept { color:var(--muted); font-size:.86em; margin-top:.6em; }
+
+    /* section divider slides — title group sits a bit below center */
+    .reveal .slides > section.divider {
+      text-align:center; height:100%;
+      display:flex; flex-direction:column; justify-content:center;
+      padding-top:12%;
+    }
+    .divider .title-block {
+      display:inline-block; margin:0 auto;
+      background:rgba(31,111,120,.07); border:1px solid rgba(31,111,120,.12);
+      padding:.85em 1.8em 1em; border-radius:16px;
+    }
+    .divider.p3 .title-block { background:rgba(91,78,168,.07); border-color:rgba(91,78,168,.14); }
+    .divider .part-no { color:var(--accent2); font-weight:700; font-size:.72em; letter-spacing:.18em; text-transform:uppercase; }
+    .divider h1 { color:var(--ink); font-size:1.5em; margin:.3em auto 0; }
+    /* publication info — plain centered text, each part on its own line */
+    .divider .pub { margin:1.7em auto 0; max-width:1120px; }
+    .divider .pub .line { color:var(--muted); line-height:1.5; white-space:nowrap; }
+    .divider .pub .ttl-line { font-size:.6em; }
+    .divider .pub .jrnl-line { font-size:.56em; margin-top:.2em; }
+    .divider .pub .lbl { font-weight:700; letter-spacing:.04em; text-transform:uppercase; font-size:.85em; color:var(--accent2); }
+    .divider .pub .ttl { color:var(--accent); font-style:italic; font-weight:600; }
+    .divider .pub .jrnl { color:var(--ink); font-weight:600; }
+    .divider .pub .authors { color:var(--muted); font-size:.5em; margin-top:.55em; white-space:nowrap; }
+  </style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ============ COVER — TITLE ============ -->
+<section class="title-slide center">
+  <div class="kicker">PhD Oral Defense · National University of Singapore · 2026</div>
+  <h1>Machine Learning Augmented Simulation and Analysis of Dynamical Systems</h1>
+  <div class="cover-rule"></div>
+  <div class="left cover-info">
+    <p><span class="lbl">Presenter:</span> Guo Yue</p>
+    <p><span class="lbl">Supervisor:</span> Li Qianxiao</p>
+    <p class="dept">Department of Mathematics</p>
+  </div>
+  <!-- bottom row: QR (left) and NUS logo (right) share one baseline — equal height, so top & bottom edges line up -->
+  <img src="img/QR_code.png" alt="QR code" style="position:absolute; left:6%; top:565px; height:95px; width:auto">
+  <img src="img/nus_logo.png" alt="National University of Singapore" style="position:absolute; right:6%; top:565px; width:205px; height:auto">
+  <aside class="notes">Cover</aside>
+</section>
+
+<!-- ============ SLIDE 0 — COLD OPEN: feel a dynamical system (animated gallery) ============ -->
+<section>
+  <h2>What is a dynamical system?</h2>
+  <p class="small center muted" style="margin:.15em 0 .35em">A <strong>state that evolves in time</strong> — four everyday examples, all in motion:</p>
+
+  <div style="display:grid;grid-template-columns:repeat(2,auto);justify-content:center;gap:14px 46px;margin-top:.1em">
+
+    <!-- ===== molecule: thermal vibration ===== -->
+    <div>
+      <div class="frame">
+        <svg viewBox="0 0 300 180" style="width:330px;max-width:100%;height:auto;display:block"
+             xmlns="http://www.w3.org/2000/svg">
+          <g transform="translate(150,90)">
+            <g><animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="26s" repeatCount="indefinite"/>
+            <g><animateTransform attributeName="transform" type="scale" values="1;1.03;1" dur="2.3s" repeatCount="indefinite"/>
+              <circle cx="19.1" cy="20.4" r="20.3" fill="none" stroke="#cfe0e1" stroke-width="2"/>
+              <g stroke="#a9c7c9" stroke-linecap="round">
+                <line x1="19.1" y1="-5.9" x2="41.4" y2="7.2" stroke-width="4"/>
+                <line x1="41.4" y1="7.2" x2="41.4" y2="33.6" stroke-width="4"/>
+                <line x1="41.4" y1="33.6" x2="19.1" y2="46.7" stroke-width="4"/>
+                <line x1="19.1" y1="46.7" x2="-3.2" y2="33.6" stroke-width="4"/>
+                <line x1="-3.2" y1="33.6" x2="-3.2" y2="7.2" stroke-width="4"/>
+                <line x1="-3.2" y1="7.2" x2="19.1" y2="-5.9" stroke-width="4"/>
+                <line x1="19.1" y1="-5.9" x2="19.1" y2="-28.2" stroke-width="4"/>
+                <line x1="20.0" y1="-26.6" x2="38.3" y2="-36.7" stroke-width="2.6"/>
+                <line x1="18.2" y1="-29.9" x2="36.4" y2="-40.0" stroke-width="2.6"/>
+                <line x1="19.1" y1="-28.2" x2="2.9" y2="-40.4" stroke-width="4"/>
+                <line x1="2.9" y1="-40.4" x2="2.9" y2="-54.6" stroke-width="4"/>
+                <line x1="-3.2" y1="7.2" x2="-25.5" y2="-1.9" stroke-width="4"/>
+                <line x1="-25.5" y1="-1.9" x2="-43.7" y2="10.3" stroke-width="4"/>
+                <line x1="-45.6" y1="10.5" x2="-43.6" y2="30.7" stroke-width="2.6"/>
+                <line x1="-41.8" y1="10.1" x2="-39.8" y2="30.4" stroke-width="2.6"/>
+                <line x1="-43.7" y1="10.3" x2="-66.0" y2="0.1" stroke-width="4"/>
+              </g>
+              <circle cx="2.9" cy="-54.6" r="4.0" fill="#c9d9da"/>
+              <circle cx="37.3" cy="-38.4" r="6.0" fill="#cc5a5a"/>
+              <circle cx="2.9" cy="-40.4" r="6.0" fill="#cc5a5a"/>
+              <circle cx="-25.5" cy="-1.9" r="6.0" fill="#cc5a5a"/>
+              <circle cx="-41.7" cy="30.5" r="6.0" fill="#cc5a5a"/>
+              <circle cx="19.1" cy="-5.9" r="6.5" fill="#1f6f78"/>
+              <circle cx="-3.2" cy="7.2" r="6.5" fill="#1f6f78"/>
+              <circle cx="-3.2" cy="33.6" r="6.5" fill="#1f6f78"/>
+              <circle cx="19.1" cy="46.7" r="6.5" fill="#1f6f78"/>
+              <circle cx="41.4" cy="33.6" r="6.5" fill="#1f6f78"/>
+              <circle cx="41.4" cy="7.2" r="6.5" fill="#1f6f78"/>
+              <circle cx="19.1" cy="-28.2" r="6.5" fill="#1f6f78"/>
+              <circle cx="-43.7" cy="10.3" r="6.5" fill="#1f6f78"/>
+              <circle cx="-66.0" cy="0.1" r="6.5" fill="#1f6f78"/>
+            </g></g>
+          </g>
+        </svg>
+      </div>
+      <div style="text-align:center;font-size:.6em;font-weight:600;color:var(--accent);margin-top:5px">molecule <span class="muted">· molecular dynamics</span></div>
+    </div>
+
+    <!-- ===== oscillator: dot orbiting a limit cycle ===== -->
+    <div>
+      <div class="frame">
+        <svg viewBox="0 0 300 180" style="width:330px;max-width:100%;height:auto;display:block"
+             xmlns="http://www.w3.org/2000/svg">
+          <g stroke="#c9cfd4" stroke-width="1" opacity=".7">
+            <line x1="44" y1="90" x2="256" y2="90"/><line x1="150" y1="20" x2="150" y2="160"/>
+          </g>
+          <path d="M158.0,90.0 L159.4,91.3 L160.4,93.0 L161.2,95.0 L161.5,97.2 L161.3,99.6 L160.7,102.0 L159.6,104.4 L158.1,106.6 L156.0,108.7 L153.5,110.4 L150.7,111.8 L147.5,112.7 L144.1,113.1 L140.6,113.0 L137.0,112.3 L133.4,111.0 L130.0,109.1 L126.8,106.6 L123.9,103.6 L121.5,100.1 L119.6,96.2 L118.2,92.0 L117.5,87.4 L117.5,82.8 L118.1,78.1 L119.5,73.4 L121.6,68.9 L124.3,64.7 L127.7,60.8 L131.7,57.5 L136.2,54.7 L141.1,52.6 L146.4,51.1 L151.9,50.4 L157.5,50.6 L163.1,51.5 L168.5,53.3 L173.8,55.8 L178.6,59.1 L183.0,63.1 L186.8,67.8 L190.0,73.0 L192.4,78.6 L194.0,84.6 L194.7,90.8 L194.5,97.0 L193.5,103.3 L191.5,109.4 L188.7,115.2 L185.1,120.6 L180.7,125.4 L175.6,129.6 L170.0,133.1 L163.8,135.7 L157.4,137.5 L150.7,138.4 L143.9,138.3 L137.1,137.2 L130.6,135.2 L124.3,132.2 L118.5,128.4 L113.3,123.8 L108.7,118.5 L105.0,112.6 L102.0,106.1 L100.0,99.3 L99.0,92.3 L99.0,85.1 L100.0,78.0 L102.0,71.1 L104.9,64.5 L108.8,58.3 L113.5,52.8 L118.9,47.9 L125.0,43.8 L131.7,40.6 L138.7,38.4 L146.0,37.2 L153.4,37.0 L160.8,37.9 L168.0,39.8 L174.9,42.6 L181.4,46.5 L187.2,51.2 L192.4,56.7 L196.7,62.9 L200.1,69.6 L202.6,76.8 L204.0,84.2 L204.4,91.8 L203.7,99.4 L202.0,106.9 L199.2,114.0 L195.5,120.7 L190.8,126.8 L185.3,132.2 L179.1,136.8 L172.4,140.5 L165.1,143.2 L157.6,144.8 L149.8,145.4 L142.1,144.9 L134.5,143.4 L127.2,140.7 L120.3,137.1 L113.9,132.6 L108.3,127.2 L103.5,121.0 L99.6,114.2 L96.6,107.0 L94.7,99.4 L93.9,91.6 L94.2,83.7 L95.5,76.0 L98.0,68.5 L101.4,61.4 L105.9,54.9 L111.2,49.0 L117.2,44.0 L124.0,39.8 L131.2,36.6 L138.8,34.5 L146.7,33.4 L154.6,33.5 L162.4,34.7 L170.1,36.9 L177.3,40.2 L184.0,44.5 L190.0,49.6 L195.3,55.6 L199.7,62.2 L203.1,69.4 L205.5,77.0 L206.8,84.9"
+                fill="none" stroke="#1f6f78" stroke-width="1.6" opacity=".38"/>
+          <circle cx="150" cy="90" r="58" fill="none" stroke="#5b4ea8" stroke-width="3"/>
+          <circle r="7" fill="#1f6f78">
+            <animateMotion dur="5.5s" repeatCount="indefinite" path="M158.0,90.0 L159.4,91.3 L160.4,93.0 L161.2,95.0 L161.5,97.2 L161.3,99.6 L160.7,102.0 L159.6,104.4 L158.1,106.6 L156.0,108.7 L153.5,110.4 L150.7,111.8 L147.5,112.7 L144.1,113.1 L140.6,113.0 L137.0,112.3 L133.4,111.0 L130.0,109.1 L126.8,106.6 L123.9,103.6 L121.5,100.1 L119.6,96.2 L118.2,92.0 L117.5,87.4 L117.5,82.8 L118.1,78.1 L119.5,73.4 L121.6,68.9 L124.3,64.7 L127.7,60.8 L131.7,57.5 L136.2,54.7 L141.1,52.6 L146.4,51.1 L151.9,50.4 L157.5,50.6 L163.1,51.5 L168.5,53.3 L173.8,55.8 L178.6,59.1 L183.0,63.1 L186.8,67.8 L190.0,73.0 L192.4,78.6 L194.0,84.6 L194.7,90.8 L194.5,97.0 L193.5,103.3 L191.5,109.4 L188.7,115.2 L185.1,120.6 L180.7,125.4 L175.6,129.6 L170.0,133.1 L163.8,135.7 L157.4,137.5 L150.7,138.4 L143.9,138.3 L137.1,137.2 L130.6,135.2 L124.3,132.2 L118.5,128.4 L113.3,123.8 L108.7,118.5 L105.0,112.6 L102.0,106.1 L100.0,99.3 L99.0,92.3 L99.0,85.1 L100.0,78.0 L102.0,71.1 L104.9,64.5 L108.8,58.3 L113.5,52.8 L118.9,47.9 L125.0,43.8 L131.7,40.6 L138.7,38.4 L146.0,37.2 L153.4,37.0 L160.8,37.9 L168.0,39.8 L174.9,42.6 L181.4,46.5 L187.2,51.2 L192.4,56.7 L196.7,62.9 L200.1,69.6 L202.6,76.8 L204.0,84.2 L204.4,91.8 L203.7,99.4 L202.0,106.9 L199.2,114.0 L195.5,120.7 L190.8,126.8 L185.3,132.2 L179.1,136.8 L172.4,140.5 L165.1,143.2 L157.6,144.8 L149.8,145.4 L142.1,144.9 L134.5,143.4 L127.2,140.7 L120.3,137.1 L113.9,132.6 L108.3,127.2 L103.5,121.0 L99.6,114.2 L96.6,107.0 L94.7,99.4 L93.9,91.6 L94.2,83.7 L95.5,76.0 L98.0,68.5 L101.4,61.4 L105.9,54.9 L111.2,49.0 L117.2,44.0 L124.0,39.8 L131.2,36.6 L138.8,34.5 L146.7,33.4 L154.6,33.5 L162.4,34.7 L170.1,36.9 L177.3,40.2 L184.0,44.5 L190.0,49.6 L195.3,55.6 L199.7,62.2 L203.1,69.4 L205.5,77.0 L206.8,84.9 L207.9,92.9 L207.0,101.0 L204.9,108.8 L201.7,116.3 L197.5,123.2 L192.4,129.6 L186.5,135.1 L179.8,139.7 L172.6,143.4 L164.9,146.0 L157.0,147.6 L148.9,148.0 L140.8,147.3 L132.9,145.4 L125.3,142.5 L118.2,138.5 L111.8,133.6 L106.1,127.9 L101.2,121.4 L97.3,114.2 L94.4,106.6 L92.7,98.7 L92.0,90.6 L92.5,82.5 L94.1,74.6 L96.8,66.9 L100.5,59.7 L105.2,53.1 L110.8,47.2 L117.2,42.2 L124.1,38.1 L131.6,35.0 L139.5,33.0 L147.6,32.1 L155.7,32.3 L163.7,33.6 L171.4,36.1 L178.7,39.6"/>
+            <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.06;0.86;1" dur="5.5s" repeatCount="indefinite"/>
+          </circle>
+        </svg>
+      </div>
+      <div style="text-align:center;font-size:.6em;font-weight:600;color:var(--accent);margin-top:5px">oscillator <span class="muted">· limit cycle</span></div>
+    </div>
+
+    <!-- ===== wave: traveling periodic wave ===== -->
+    <div>
+      <div class="frame">
+        <svg viewBox="0 0 300 180" style="width:330px;max-width:100%;height:auto;display:block"
+             xmlns="http://www.w3.org/2000/svg">
+          <defs><clipPath id="wclip1"><rect x="0" y="0" width="300" height="180"/></clipPath></defs>
+          <line x1="0" y1="90" x2="300" y2="90" stroke="#e2e8e9" stroke-width="1.5"/>
+          <g clip-path="url(#wclip1)">
+            <path d="M-100,90.0 L-97,86.3 L-94,82.6 L-91,79.3 L-88,76.3 L-85,73.8 L-82,71.9 L-79,70.6 L-76,70.0 L-73,70.2 L-70,71.0 L-67,72.5 L-64,74.6 L-61,77.3 L-58,80.4 L-55,83.8 L-52,87.5 L-49,91.3 L-46,95.0 L-43,98.5 L-40,101.8 L-37,104.6 L-34,106.9 L-31,108.6 L-28,109.6 L-25,110.0 L-22,109.6 L-19,108.6 L-16,106.9 L-13,104.6 L-10,101.8 L-7,98.5 L-4,95.0 L-1,91.3 L2,87.5 L5,83.8 L8,80.4 L11,77.3 L14,74.6 L17,72.5 L20,71.0 L23,70.2 L26,70.0 L29,70.6 L32,71.9 L35,73.8 L38,76.3 L41,79.3 L44,82.6 L47,86.3 L50,90.0 L53,93.7 L56,97.4 L59,100.7 L62,103.7 L65,106.2 L68,108.1 L71,109.4 L74,110.0 L77,109.8 L80,109.0 L83,107.5 L86,105.4 L89,102.7 L92,99.6 L95,96.2 L98,92.5 L101,88.7 L104,85.0 L107,81.5 L110,78.2 L113,75.4 L116,73.1 L119,71.4 L122,70.4 L125,70.0 L128,70.4 L131,71.4 L134,73.1 L137,75.4 L140,78.2 L143,81.5 L146,85.0 L149,88.7 L152,92.5 L155,96.2 L158,99.6 L161,102.7 L164,105.4 L167,107.5 L170,109.0 L173,109.8 L176,110.0 L179,109.4 L182,108.1 L185,106.2 L188,103.7 L191,100.7 L194,97.4 L197,93.7 L200,90.0 L203,86.3 L206,82.6 L209,79.3 L212,76.3 L215,73.8 L218,71.9 L221,70.6 L224,70.0 L227,70.2 L230,71.0 L233,72.5 L236,74.6 L239,77.3 L242,80.4 L245,83.8 L248,87.5 L251,91.3 L254,95.0 L257,98.5 L260,101.8 L263,104.6 L266,106.9 L269,108.6 L272,109.6 L275,110.0 L278,109.6 L281,108.6 L284,106.9 L287,104.6 L290,101.8 L293,98.5 L296,95.0 L299,91.3 L302,87.5 L305,83.8 L308,80.4 L311,77.3 L314,74.6 L317,72.5 L320,71.0 L323,70.2 L326,70.0 L329,70.6 L332,71.9 L335,73.8 L338,76.3 L341,79.3 L344,82.6 L347,86.3 L350,90.0 L353,93.7 L356,97.4 L359,100.7 L362,103.7 L365,106.2 L368,108.1 L371,109.4 L374,110.0 L377,109.8 L380,109.0 L383,107.5 L386,105.4 L389,102.7 L392,99.6 L395,96.2 L398,92.5 L400,180 L-100,180 Z" fill="#1f6f78" opacity=".12">
+              <animateTransform attributeName="transform" type="translate" values="0,0;-100,0" dur="2.6s" repeatCount="indefinite"/></path>
+            <path d="M-100,83.5 L-97,86.1 L-94,89.0 L-91,92.0 L-88,94.9 L-85,97.2 L-82,99.0 L-79,99.9 L-76,99.9 L-73,99.0 L-70,97.2 L-67,94.9 L-64,92.0 L-61,89.0 L-58,86.1 L-55,83.5 L-52,81.5 L-49,80.3 L-46,80.0 L-43,80.6 L-40,82.1 L-37,84.3 L-34,87.0 L-31,90.0 L-28,93.0 L-25,95.7 L-22,97.9 L-19,99.4 L-16,100.0 L-13,99.7 L-10,98.5 L-7,96.5 L-4,93.9 L-1,91.0 L2,88.0 L5,85.1 L8,82.8 L11,81.0 L14,80.1 L17,80.1 L20,81.0 L23,82.8 L26,85.1 L29,88.0 L32,91.0 L35,93.9 L38,96.5 L41,98.5 L44,99.7 L47,100.0 L50,99.4 L53,97.9 L56,95.7 L59,93.0 L62,90.0 L65,87.0 L68,84.3 L71,82.1 L74,80.6 L77,80.0 L80,80.3 L83,81.5 L86,83.5 L89,86.1 L92,89.0 L95,92.0 L98,94.9 L101,97.2 L104,99.0 L107,99.9 L110,99.9 L113,99.0 L116,97.2 L119,94.9 L122,92.0 L125,89.0 L128,86.1 L131,83.5 L134,81.5 L137,80.3 L140,80.0 L143,80.6 L146,82.1 L149,84.3 L152,87.0 L155,90.0 L158,93.0 L161,95.7 L164,97.9 L167,99.4 L170,100.0 L173,99.7 L176,98.5 L179,96.5 L182,93.9 L185,91.0 L188,88.0 L191,85.1 L194,82.8 L197,81.0 L200,80.1 L203,80.1 L206,81.0 L209,82.8 L212,85.1 L215,88.0 L218,91.0 L221,93.9 L224,96.5 L227,98.5 L230,99.7 L233,100.0 L236,99.4 L239,97.9 L242,95.7 L245,93.0 L248,90.0 L251,87.0 L254,84.3 L257,82.1 L260,80.6 L263,80.0 L266,80.3 L269,81.5 L272,83.5 L275,86.1 L278,89.0 L281,92.0 L284,94.9 L287,97.2 L290,99.0 L293,99.9 L296,99.9 L299,99.0 L302,97.2 L305,94.9 L308,92.0 L311,89.0 L314,86.1 L317,83.5 L320,81.5 L323,80.3 L326,80.0 L329,80.6 L332,82.1 L335,84.3 L338,87.0 L341,90.0 L344,93.0 L347,95.7 L350,97.9 L353,99.4 L356,100.0 L359,99.7 L362,98.5 L365,96.5 L368,93.9 L371,91.0 L374,88.0 L377,85.1 L380,82.8 L383,81.0 L386,80.1 L389,80.1 L392,81.0 L395,82.8 L398,85.1" fill="none" stroke="#7fb2b7" stroke-width="2" opacity=".8" stroke-linecap="round">
+              <animateTransform attributeName="transform" type="translate" values="0,0;-62,0" dur="1.9s" repeatCount="indefinite"/></path>
+            <path d="M-100,90.0 L-97,86.3 L-94,82.6 L-91,79.3 L-88,76.3 L-85,73.8 L-82,71.9 L-79,70.6 L-76,70.0 L-73,70.2 L-70,71.0 L-67,72.5 L-64,74.6 L-61,77.3 L-58,80.4 L-55,83.8 L-52,87.5 L-49,91.3 L-46,95.0 L-43,98.5 L-40,101.8 L-37,104.6 L-34,106.9 L-31,108.6 L-28,109.6 L-25,110.0 L-22,109.6 L-19,108.6 L-16,106.9 L-13,104.6 L-10,101.8 L-7,98.5 L-4,95.0 L-1,91.3 L2,87.5 L5,83.8 L8,80.4 L11,77.3 L14,74.6 L17,72.5 L20,71.0 L23,70.2 L26,70.0 L29,70.6 L32,71.9 L35,73.8 L38,76.3 L41,79.3 L44,82.6 L47,86.3 L50,90.0 L53,93.7 L56,97.4 L59,100.7 L62,103.7 L65,106.2 L68,108.1 L71,109.4 L74,110.0 L77,109.8 L80,109.0 L83,107.5 L86,105.4 L89,102.7 L92,99.6 L95,96.2 L98,92.5 L101,88.7 L104,85.0 L107,81.5 L110,78.2 L113,75.4 L116,73.1 L119,71.4 L122,70.4 L125,70.0 L128,70.4 L131,71.4 L134,73.1 L137,75.4 L140,78.2 L143,81.5 L146,85.0 L149,88.7 L152,92.5 L155,96.2 L158,99.6 L161,102.7 L164,105.4 L167,107.5 L170,109.0 L173,109.8 L176,110.0 L179,109.4 L182,108.1 L185,106.2 L188,103.7 L191,100.7 L194,97.4 L197,93.7 L200,90.0 L203,86.3 L206,82.6 L209,79.3 L212,76.3 L215,73.8 L218,71.9 L221,70.6 L224,70.0 L227,70.2 L230,71.0 L233,72.5 L236,74.6 L239,77.3 L242,80.4 L245,83.8 L248,87.5 L251,91.3 L254,95.0 L257,98.5 L260,101.8 L263,104.6 L266,106.9 L269,108.6 L272,109.6 L275,110.0 L278,109.6 L281,108.6 L284,106.9 L287,104.6 L290,101.8 L293,98.5 L296,95.0 L299,91.3 L302,87.5 L305,83.8 L308,80.4 L311,77.3 L314,74.6 L317,72.5 L320,71.0 L323,70.2 L326,70.0 L329,70.6 L332,71.9 L335,73.8 L338,76.3 L341,79.3 L344,82.6 L347,86.3 L350,90.0 L353,93.7 L356,97.4 L359,100.7 L362,103.7 L365,106.2 L368,108.1 L371,109.4 L374,110.0 L377,109.8 L380,109.0 L383,107.5 L386,105.4 L389,102.7 L392,99.6 L395,96.2 L398,92.5" fill="none" stroke="#1f6f78" stroke-width="3.5" stroke-linecap="round">
+              <animateTransform attributeName="transform" type="translate" values="0,0;-100,0" dur="2.6s" repeatCount="indefinite"/></path>
+          </g>
+          <circle cx="40" cy="90" r="4.5" fill="#fff" stroke="#1f6f78" stroke-width="2">
+            <animate attributeName="cy" values="78.2;85.3;93.1;100.4;106.2;109.4;109.8;107.1;101.8;94.7;86.9;79.6;73.8;70.6;70.2;72.9;78.2" dur="2.6s" repeatCount="indefinite"/></circle>
+          <circle cx="90" cy="90" r="4.5" fill="#fff" stroke="#1f6f78" stroke-width="2">
+            <animate attributeName="cy" values="101.8;94.7;86.9;79.6;73.8;70.6;70.2;72.9;78.2;85.3;93.1;100.4;106.2;109.4;109.8;107.1;101.8" dur="2.6s" repeatCount="indefinite"/></circle>
+          <circle cx="140" cy="90" r="4.5" fill="#fff" stroke="#1f6f78" stroke-width="2">
+            <animate attributeName="cy" values="78.2;85.3;93.1;100.4;106.2;109.4;109.8;107.1;101.8;94.7;86.9;79.6;73.8;70.6;70.2;72.9;78.2" dur="2.6s" repeatCount="indefinite"/></circle>
+          <circle cx="190" cy="90" r="4.5" fill="#fff" stroke="#1f6f78" stroke-width="2">
+            <animate attributeName="cy" values="101.8;94.7;86.9;79.6;73.8;70.6;70.2;72.9;78.2;85.3;93.1;100.4;106.2;109.4;109.8;107.1;101.8" dur="2.6s" repeatCount="indefinite"/></circle>
+          <circle cx="240" cy="90" r="4.5" fill="#fff" stroke="#1f6f78" stroke-width="2">
+            <animate attributeName="cy" values="78.2;85.3;93.1;100.4;106.2;109.4;109.8;107.1;101.8;94.7;86.9;79.6;73.8;70.6;70.2;72.9;78.2" dur="2.6s" repeatCount="indefinite"/></circle>
+        </svg>
+      </div>
+      <div style="text-align:center;font-size:.6em;font-weight:600;color:var(--accent);margin-top:5px">wave <span class="muted">· transport</span></div>
+    </div>
+
+    <!-- ===== cart-pole: an inverted pendulum being balanced (control) ===== -->
+    <div>
+      <div class="frame">
+        <svg viewBox="0 0 300 180" style="width:330px;max-width:100%;height:auto;display:block"
+             xmlns="http://www.w3.org/2000/svg">
+          <line x1="30" y1="151" x2="270" y2="151" stroke="#cfd8da" stroke-width="3" stroke-linecap="round"/>
+          <g>
+            <animateTransform attributeName="transform" type="translate"
+              values="-22,0;22,0;-15,0;15,0;-22,0" dur="2.6s" repeatCount="indefinite"/>
+            <rect x="125" y="132" width="50" height="19" rx="5" fill="#1f6f78"/>
+            <circle cx="136" cy="151" r="6" fill="#16545b"/>
+            <circle cx="164" cy="151" r="6" fill="#16545b"/>
+            <g>
+              <animateTransform attributeName="transform" type="rotate"
+                values="-8 150 132;8 150 132;-5 150 132;5 150 132;-8 150 132" dur="2.6s" repeatCount="indefinite"/>
+              <line x1="150" y1="132" x2="150" y2="66" stroke="#5b4ea8" stroke-width="5" stroke-linecap="round"/>
+              <circle cx="150" cy="66" r="10" fill="#5b4ea8"/>
+            </g>
+            <circle cx="150" cy="132" r="3.6" fill="#22303a"/>
+          </g>
+        </svg>
+      </div>
+      <div style="text-align:center;font-size:.6em;font-weight:600;color:var(--accent);margin-top:5px">pendulum <span class="muted">· with control</span></div>
+    </div>
+
+  </div>
+  <aside class="notes">Cold open — let the audience feel four dynamical systems in motion (molecule / oscillator / wave / controlled pendulum), all states evolving in time. Leads into: to simulate one, we choose a computable form.</aside>
+</section>
+
+<!-- ============ SLIDE 1 — SETTING (essence: choose a computable form) ============ -->
+<section>
+  <h2>Dynamics = choosing a computable <em>form</em></h2>
+
+  <!-- grounding strip: real systems that recur later in the talk -->
+  <div class="fragment fade-up" style="display:flex;gap:30px;justify-content:center;align-items:flex-end;margin:.3em 0 .05em">
+    <div style="text-align:center">
+      <svg viewBox="0 0 48 48" width="36" height="36" fill="none" stroke="#1f6f78" stroke-width="2.4" stroke-linecap="round">
+        <line x1="24" y1="30" x2="12" y2="18"/><line x1="24" y1="30" x2="36" y2="18"/>
+        <circle cx="24" cy="30" r="5" fill="#1f6f78" stroke="none"/>
+        <circle cx="12" cy="18" r="3.4" fill="#1f6f78" stroke="none"/>
+        <circle cx="36" cy="18" r="3.4" fill="#1f6f78" stroke="none"/>
+        <path d="M14 40 q10 6 20 0" stroke-opacity=".4" stroke-width="1.8"/>
+      </svg>
+      <div class="cap">molecule</div>
+    </div>
+    <div style="text-align:center">
+      <svg viewBox="0 0 48 48" width="36" height="36" fill="none" stroke="#1f6f78" stroke-width="2.4" stroke-linecap="round">
+        <circle cx="24" cy="24" r="13"/>
+        <path d="M24 24 C 26 21, 30 22, 30 26 C 30 31, 23 32, 19 27 C 14 21, 21 13, 29 14 C 34 14.5, 37 18, 37 24" stroke-width="1.7" stroke-opacity=".55"/>
+      </svg>
+      <div class="cap">oscillator</div>
+    </div>
+    <div style="text-align:center">
+      <svg viewBox="0 0 48 48" width="36" height="36" fill="none" stroke="#1f6f78" stroke-width="2.4" stroke-linecap="round">
+        <path d="M4 32 C 15 32, 17 13, 24 13 C 31 13, 33 32, 44 32"/>
+        <line x1="4" y1="32" x2="44" y2="32" stroke-opacity=".3" stroke-width="1.5"/>
+      </svg>
+      <div class="cap">wave</div>
+    </div>
+    <div style="text-align:center">
+      <svg viewBox="0 0 48 48" width="36" height="36" fill="none" stroke="#1f6f78" stroke-width="2.4" stroke-linecap="round">
+        <line x1="24" y1="8" x2="34" y2="30"/>
+        <circle cx="24" cy="8" r="2" fill="#1f6f78" stroke="none"/>
+        <circle cx="34" cy="32" r="4.6" fill="#1f6f78" stroke="none"/>
+        <path d="M14 30 q10 8 22 1" stroke-opacity=".35" stroke-width="1.7"/>
+      </svg>
+      <div class="cap">pendulum · control</div>
+    </div>
+  </div>
+  <p class="small center muted fragment" style="margin:.2em 0 .5em">All are <strong>states evolving in time</strong></p>
+
+  <div class="iconcards" style="margin-top:.2em">
+    <div class="ic fragment fade-up">
+      <svg class="glyph" viewBox="0 0 48 48" fill="none" stroke="#1f6f78" stroke-width="2.5"
+           stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 33 C 14 33, 15 16, 23 16 S 35 28, 43 14"/>
+        <path d="M43 14 l-6 1 M43 14 l-1 6"/>
+        <path d="M8 40 C 15 40, 17 27, 24 26" stroke-opacity=".4"/>
+      </svg>
+      <h3>The equation</h3>
+      <p>the evolution law<br>\( \dot{\boldsymbol y}=\boldsymbol f(\boldsymbol y)\)</p>
+    </div>
+    <div class="ic b fragment fade-up">
+      <svg class="glyph" viewBox="0 0 48 48" fill="none" stroke="#d98c1f" stroke-width="2.5"
+           stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10 6 v32 h32"/>
+        <path d="M33 17 L10 38 M33 17 L42 38" stroke-width="1.5" stroke-dasharray="2.5 3"/>
+        <circle cx="33" cy="17" r="3.2" fill="#d98c1f" stroke="none"/>
+      </svg>
+      <h3>The representation</h3>
+      <p>coordinates we track in</p>
+    </div>
+    <div class="ic c3 fragment fade-up">
+      <svg class="glyph" viewBox="0 0 48 48" fill="none" stroke="#5b4ea8" stroke-width="2.5"
+           stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 36 C 14 36, 16 14, 24 14 S 38 28, 44 14" stroke-opacity=".3"/>
+        <path d="M6 36 H16 V24 H26 V16 H36 V22 H44" stroke-width="2.2"/>
+        <circle cx="6"  cy="36" r="2.4" fill="#5b4ea8" stroke="none"/>
+        <circle cx="16" cy="24" r="2.4" fill="#5b4ea8" stroke="none"/>
+        <circle cx="26" cy="16" r="2.4" fill="#5b4ea8" stroke="none"/>
+        <circle cx="36" cy="22" r="2.4" fill="#5b4ea8" stroke="none"/>
+      </svg>
+      <h3>The scheme</h3>
+      <p>step size &amp; solver</p>
+    </div>
+  </div>
+
+  <div class="box small center fragment fade-up" style="margin-top:1.0em">
+    Right form → the trajectory computes <strong>accurately, stably, cheaply</strong>;<br>
+    Wrong form → it drifts or blows up.</p>
+  </div>
+  <aside class="notes">Slide 1 — essence: simulating a dynamical system = choosing a computable form with three dials (equation · representation · scheme). Strip previews later examples (molecule → MD; oscillator → Van der Pol / Stuart–Landau; wave → KdV; pendulum → closure).</aside>
+</section>
+
+<!-- ============ SLIDE 2 — CLASSICAL: every form derived by hand ============ -->
+<section>
+  <!-- <div class="kicker">The classical tradition · Newton → Euler → Runge–Kutta → symplectic</div> -->
+  <h2>Classically, every dial is set <em>by hand</em></h2>
+  <p class="small" style="margin-top:.2em">Each form built <strong>from first principles, with a theorem attached</strong>:</p>
+
+  <div class="iconcards" style="margin-top:.7em">
+    <div class="ic fragment fade-up">
+      <svg class="glyph" viewBox="0 0 48 48" fill="none" stroke="#1f6f78" stroke-width="2.5"
+           stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 33 C 14 33, 15 16, 23 16 S 35 28, 43 14"/>
+        <path d="M43 14 l-6 1 M43 14 l-1 6"/>
+        <path d="M8 40 C 15 40, 17 27, 24 26" stroke-opacity=".4"/>
+      </svg>
+      <h3>The equation</h3>
+      <p>first principles<br>\( m\ddot{\boldsymbol x}=-\nabla V\)</p>
+      <div class="pill" style="margin-top:.35em">exact · interpretable</div>
+    </div>
+    <div class="ic b fragment fade-up">
+      <svg class="glyph" viewBox="0 0 48 48" fill="none" stroke="#d98c1f" stroke-width="2.5"
+           stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10 6 v32 h32"/>
+        <path d="M33 17 L10 38 M33 17 L42 38" stroke-width="1.5" stroke-dasharray="2.5 3"/>
+        <circle cx="33" cy="17" r="3.2" fill="#d98c1f" stroke="none"/>
+      </svg>
+      <h3>The representation</h3>
+      <p>human insight<br>normal modes</p>
+      <div class="pill" style="margin-top:.35em">decoupled</div>
+    </div>
+    <div class="ic c3 fragment fade-up">
+      <svg class="glyph" viewBox="0 0 48 48" fill="none" stroke="#5b4ea8" stroke-width="2.5"
+           stroke-linecap="round" stroke-linejoin="round">
+        <path d="M5 36 C 14 36, 16 14, 24 14 S 38 28, 44 14" stroke-opacity=".3"/>
+        <path d="M6 36 H16 V24 H26 V16 H36 V22 H44" stroke-width="2.2"/>
+        <circle cx="6"  cy="36" r="2.4" fill="#5b4ea8" stroke="none"/>
+        <circle cx="16" cy="24" r="2.4" fill="#5b4ea8" stroke="none"/>
+        <circle cx="26" cy="16" r="2.4" fill="#5b4ea8" stroke="none"/>
+        <circle cx="36" cy="22" r="2.4" fill="#5b4ea8" stroke="none"/>
+      </svg>
+      <h3>The scheme</h3>
+      <p>hand-designed<br>Euler · RK · symplectic</p>
+      <div class="pill" style="margin-top:.35em">order \(p\) · stable</div>
+    </div>
+  </div>
+
+  <div class="box alt small center fragment fade-up" style="margin-top:1.2em">
+    Strict and guaranteed: hand-derivable,unknown, or too expensive.
+  </div>
+  <aside class="notes">Slide 2 — the classical / computational-math tradition: all three dials hand-derived, each with a guarantee (exact, decoupled, order-p stable). The catch: you must be able to write the form down by hand — the bridge to the data-driven shift.</aside>
+</section>
+
+<!-- ============ SLIDE 2.5 — DATA-DRIVEN SHIFT + WHY LEARNING (bridge to flowchart) ============ -->
+<section>
+  <h2>When the form is not easily hand-writable, we <em>learn</em> it</h2>
+  <!-- <p class="small" style="margin-top:.2em">The world hands us <strong>data</strong>, not clean forms — in different flavors:</p> -->
+
+  <div class="iconcards" style="margin-top:1em">
+    <div class="ic fragment fade-up">
+      <svg viewBox="0 0 118 62" style="width:118px;max-width:100%;height:auto;display:block;margin:2px auto 4px">
+        <line x1="10" y1="52" x2="112" y2="52" stroke="#c7c7c7" stroke-width="1.4"/>
+        <line x1="10" y1="52" x2="10" y2="7" stroke="#c7c7c7" stroke-width="1.4"/>
+        <g fill="#1f6f78">
+          <circle cx="22" cy="24" r="2.6"/><circle cx="34" cy="40" r="2.6"/>
+          <circle cx="46" cy="21" r="2.6"/><circle cx="58" cy="37" r="2.6"/>
+          <circle cx="70" cy="27" r="2.6"/><circle cx="82" cy="35" r="2.6"/>
+          <circle cx="94" cy="29" r="2.6"/><circle cx="104" cy="32" r="2.6"/>
+        </g>
+      </svg>
+      <h3 style="white-space:normal">Only data align with trajectories</h3>
+      <p>we watch the system move but the <em>equation is unknown</em></p>
+    </div>
+    <div class="ic c3 fragment fade-up">
+      <svg viewBox="0 0 118 62" style="width:118px;max-width:100%;height:auto;display:block;margin:2px auto 4px"
+           font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+        <g stroke="#5b4ea8" stroke-width="2.4" stroke-linecap="round" fill="none">
+          <line x1="55" y1="34" x2="41" y2="22"/><line x1="55" y1="34" x2="69" y2="22"/>
+          <line x1="55" y1="34" x2="55" y2="49"/>
+        </g>
+        <g fill="#5b4ea8">
+          <circle cx="55" cy="34" r="5.2"/><circle cx="41" cy="22" r="3.6"/>
+          <circle cx="69" cy="22" r="3.6"/><circle cx="55" cy="49" r="3.6"/>
+        </g>
+        <text x="86" y="20" font-size="15" font-weight="700" fill="#d98c1f">$$$</text>
+      </svg>
+      <h3 style="white-space:normal">Computation costs too much</h3>
+      <p>each force is a <em>quantum-scale calculation</em> (molecular dynamics)</p>
+    </div>
+  </div>
+
+  <div class="box small center fragment fade-up" style="margin-top:1.2em">
+    <strong>Learning</strong> replaces a hand-designed form with one <em>parameterized flexibly and fit from data</em>.
+  </div>
+
+  <p class="small center muted fragment fade-up" style="margin-top:.5em">
+    Bring that power into <strong>scientific computing</strong>,
+    <em>without giving up the classical guarantees</em> → so <strong>which dial do we learn?</strong> &nbsp;→
+  </p>
+  <aside class="notes">Slide 3 — data comes in flavors: only trajectory data (unknown equation) vs equation known but too expensive (MD). Why ML: flexible form fit from data, keep guarantees. Transition: which dial do we learn → next slide's known/unknown flowchart.</aside>
+</section>
+
+<!-- ============ SLIDE 3 — VIEWPOINT / OVERVIEW ============ -->
+<section>
+  <h2>Thesis viewpoint: learn the <em>structured</em> components</h2>
+  <div class="center">
+   <svg class="fig" viewBox="20 18 815 376" style="width:84%; padding:16px 12px; margin-top:.2em"
+        xmlns="http://www.w3.org/2000/svg" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+     <defs>
+       <marker id="ah" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+         <path d="M0,0 L7,3 L0,6 z" fill="#666"/></marker>
+       <marker id="ahP" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+         <path d="M0,0 L7,3 L0,6 z" fill="#7F77DD"/></marker>
+       <marker id="ahB" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth">
+         <path d="M0,0 L7,3 L0,6 z" fill="#004C99"/></marker>
+     </defs>
+
+     <!-- ===== 1) BASE: shown first — Dynamical system & Predicted trajectory ===== -->
+     <g font-weight="bold">
+       <path d="M160,230 H195" fill="none" stroke="#666" stroke-width="1.6"/>
+       <path d="M645,230 H686" fill="none" stroke="#666" stroke-width="1.6" marker-end="url(#ah)"/>
+       <circle cx="200" cy="230" r="5" fill="#666"/>
+       <circle cx="640" cy="230" r="5" fill="#666"/>
+       <rect x="40"  y="200" width="120" height="60" rx="8" fill="#f5f5f5" stroke="#666"/>
+       <text x="100" y="224" text-anchor="middle" font-size="16" fill="#333">Dynamical</text>
+       <text x="100" y="244" text-anchor="middle" font-size="16" fill="#333">system</text>
+       <rect x="690" y="200" width="120" height="60" rx="8" fill="#f5f5f5" stroke="#666"/>
+       <text x="750" y="224" text-anchor="middle" font-size="16" fill="#333">Predicted</text>
+       <text x="750" y="244" text-anchor="middle" font-size="16" fill="#333">trajectory</text>
+     </g>
+
+     <!-- ===== 2) KNOWN dynamics block (appears second) ===== -->
+     <g class="fragment" data-fragment-index="1" font-weight="bold">
+       <rect x="230" y="30"  width="380" height="110" rx="10" fill="none" stroke="#999" stroke-width="2" stroke-dasharray="8 4"/>
+       <text x="420" y="50"  text-anchor="middle" font-size="15" fill="#444" font-weight="normal">Known dynamics</text>
+       <path d="M200,225 V95 H274" fill="none" stroke="#666" stroke-width="1.6" marker-end="url(#ah)"/>
+       <path d="M580,95 H640 V230" fill="none" stroke="#666" stroke-width="1.6"/>
+       <rect x="280" y="70"  width="100" height="50" rx="8" fill="#f5f5f5" stroke="#666"/>
+       <text x="330" y="100" text-anchor="middle" font-size="15" fill="#333">Equation</text>
+       <path d="M380,95 H416" fill="none" stroke="#7F77DD" stroke-width="1.6" marker-end="url(#ahP)"/>
+       <rect x="420" y="70"  width="160" height="50" rx="8" fill="#E8E5FD" stroke="#7F77DD"/>
+       <text x="500" y="100" text-anchor="middle" font-size="15" fill="#5046A8">Learn integrator</text>
+     </g>
+
+     <!-- ===== 3) UNKNOWN dynamics block (appears third) ===== -->
+     <g class="fragment" data-fragment-index="2" font-weight="bold">
+       <rect x="230" y="160" width="380" height="220" rx="10" fill="none" stroke="#999" stroke-width="2" stroke-dasharray="8 4"/>
+       <text x="420" y="180" text-anchor="middle" font-size="15" fill="#444" font-weight="normal">Unknown dynamics</text>
+       <path d="M206,230 H276"  fill="none" stroke="#666" stroke-width="1.6" marker-end="url(#ah)"/>
+       <path d="M580,230 H636"  fill="none" stroke="#666" stroke-width="1.6"/>
+       <path d="M200,235 V335 H276" fill="none" stroke="#666" stroke-width="1.6" marker-end="url(#ah)"/>
+       <path d="M580,335 H640 V230" fill="none" stroke="#666" stroke-width="1.6"/>
+       <rect x="280" y="205" width="300" height="50" rx="8" fill="#E1F5EE" stroke="#1D9E75"/>
+       <text x="430" y="235" text-anchor="middle" font-size="15" fill="#0F6E56">Learn representation of evolution</text>
+       <rect x="280" y="310" width="170" height="50" rx="8" fill="#BCEBFF" stroke="#004C99"/>
+       <text x="365" y="340" text-anchor="middle" font-size="15" fill="#004C99">Learn equation</text>
+       <path d="M450,335 H486" fill="none" stroke="#004C99" stroke-width="1.6" marker-end="url(#ahB)"/>
+       <rect x="490" y="310" width="90"  height="50" rx="8" fill="#f5f5f5" stroke="#666"/>
+       <text x="535" y="340" text-anchor="middle" font-size="14" fill="#333">Integrator</text>
+     </g>
+   </svg>
+  </div>
+</section>
+
+<!-- ===================================================================== -->
+<!-- PART A — LEARNING REPRESENTATIONS (unknown dynamics, Koopman)        -->
+<!-- ===================================================================== -->
+
+<!-- ============ SECTION DIVIDER — PART I ============ -->
+<section class="divider center">
+  <div class="title-block">
+    <div class="part-no">Part I · Learning representations</div>
+    <h1>Parametric Koopman Decompositions</h1>
+  </div>
+  <div class="pub">
+    <div class="line ttl-line"><span class="lbl">Published as</span> <span class="ttl">“Learning Parametric Koopman Decompositions for Prediction and Control”</span></div>
+    <div class="line jrnl-line">in <span class="jrnl">SIAM Journal on Applied Dynamical Systems</span> (2025)</div>
+    <div class="authors">Yue Guo, Milan Korda, Ioannis G. Kevrekidis, Qianxiao Li</div>
+  </div>
+</section>
+
+<!-- ============ PART 1 FOCUS (no number) ============ -->
+<section class="nonum center">
+   <svg class="fig" viewBox="20 18 815 376" style="width:88%;margin:0 auto;padding:14px 12px"
+        xmlns="http://www.w3.org/2000/svg" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+     <defs>
+       <marker id="ah1" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L7,3 L0,6 z" fill="#666"/></marker>
+       <marker id="ahP1" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L7,3 L0,6 z" fill="#7F77DD"/></marker>
+       <marker id="ahB1" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L7,3 L0,6 z" fill="#004C99"/></marker>
+     </defs>
+     <g font-weight="bold">
+       <path d="M160,230 H195" fill="none" stroke="#666" stroke-width="1.6"/>
+       <path d="M645,230 H686" fill="none" stroke="#666" stroke-width="1.6" marker-end="url(#ah1)"/>
+       <circle cx="200" cy="230" r="5" fill="#666"/>
+       <circle cx="640" cy="230" r="5" fill="#666"/>
+       <rect x="40" y="200" width="120" height="60" rx="8" fill="#f5f5f5" stroke="#666"/>
+       <text x="100" y="224" text-anchor="middle" font-size="16" fill="#333">Dynamical</text>
+       <text x="100" y="244" text-anchor="middle" font-size="16" fill="#333">system</text>
+       <rect x="690" y="200" width="120" height="60" rx="8" fill="#f5f5f5" stroke="#666"/>
+       <text x="750" y="224" text-anchor="middle" font-size="16" fill="#333">Predicted</text>
+       <text x="750" y="244" text-anchor="middle" font-size="16" fill="#333">trajectory</text>
+     </g>
+     <g font-weight="bold">
+       <rect x="230" y="30" width="380" height="110" rx="10" fill="none" stroke="#999" stroke-width="2" stroke-dasharray="8 4"/>
+       <text x="420" y="50" text-anchor="middle" font-size="15" fill="#444" font-weight="normal">Known dynamics</text>
+       <path d="M200,225 V95 H274" fill="none" stroke="#666" stroke-width="1.6" marker-end="url(#ah1)"/>
+       <path d="M580,95 H640 V230" fill="none" stroke="#666" stroke-width="1.6"/>
+       <rect x="280" y="70" width="100" height="50" rx="8" fill="#f5f5f5" stroke="#666"/>
+       <text x="330" y="100" text-anchor="middle" font-size="15" fill="#333">Equation</text>
+       <path d="M380,95 H416" fill="none" stroke="#7F77DD" stroke-width="1.6" marker-end="url(#ahP1)"/>
+       <rect x="420" y="70" width="160" height="50" rx="8" fill="#E8E5FD" stroke="#7F77DD"/>
+       <text x="500" y="100" text-anchor="middle" font-size="15" fill="#5046A8">Learn integrator</text>
+     </g>
+     <g font-weight="bold">
+       <rect x="230" y="160" width="380" height="220" rx="10" fill="none" stroke="#999" stroke-width="2" stroke-dasharray="8 4"/>
+       <text x="420" y="180" text-anchor="middle" font-size="15" fill="#444" font-weight="normal">Unknown dynamics</text>
+       <path d="M206,230 H276" fill="none" stroke="#666" stroke-width="1.6" marker-end="url(#ah1)"/>
+       <path d="M580,230 H636" fill="none" stroke="#666" stroke-width="1.6"/>
+       <path d="M200,235 V335 H276" fill="none" stroke="#666" stroke-width="1.6" marker-end="url(#ah1)"/>
+       <path d="M580,335 H640 V230" fill="none" stroke="#666" stroke-width="1.6"/>
+       <rect x="280" y="205" width="300" height="50" rx="8" fill="#E1F5EE" stroke="#1D9E75"/>
+       <text x="430" y="235" text-anchor="middle" font-size="15" fill="#0F6E56">Learn representation of evolution</text>
+       <rect x="280" y="310" width="170" height="50" rx="8" fill="#BCEBFF" stroke="#004C99"/>
+       <text x="365" y="340" text-anchor="middle" font-size="15" fill="#004C99">Learn equation</text>
+       <path d="M450,335 H486" fill="none" stroke="#004C99" stroke-width="1.6" marker-end="url(#ahB1)"/>
+       <rect x="490" y="310" width="90" height="50" rx="8" fill="#f5f5f5" stroke="#666"/>
+       <text x="535" y="340" text-anchor="middle" font-size="14" fill="#333">Integrator</text>
+     </g>
+     <ellipse cx="430" cy="230" rx="168" ry="41" fill="none" stroke="#bd8593" stroke-width="4"/>
+   </svg>
+</section>
+
+<!-- ============ P1·0 — Part I motivation (example-driven) ============ -->
+<section>
+  <div class="kicker">Motivation · Learning representations</div>
+  <h2>Make a nonlinear system look <em>linear</em> <span class="tag">PK-NN</span></h2>
+  <div class="row" style="align-items:center;justify-content:center;gap:18px;margin-top:1.1em">
+    <div style="flex:0 0 auto;text-align:center">
+      <svg viewBox="0 0 152 116" style="width:100%;max-width:250px;height:auto;display:block;margin:0 auto" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+        <circle cx="76" cy="58" r="45" fill="none" stroke="#1f6f78" stroke-width="2.8"/>
+        <path d="M80.5,58.0 L81.9,57.1 L83.0,55.8 L83.8,54.2 L84.2,52.4 L84.2,50.4 L83.7,48.3 L82.7,46.3 L81.3,44.4 L79.4,42.7 L77.2,41.3 L74.6,40.3 L71.7,39.8 L68.7,39.8 L65.6,40.3 L62.6,41.4 L59.6,43.0 L56.9,45.2 L54.5,47.8 L52.5,50.9 L51.0,54.4 L50.0,58.2 L49.7,62.2 L50.0,66.3 L51.0,70.4 L52.6,74.3 L54.9,78.0 L57.7,81.4 L61.2,84.3 L65.1,86.7 L69.4,88.5 L74.0,89.7 L78.8,90.1 L83.7,89.7 L88.5,88.6 L93.2,86.8 L97.5,84.2 L101.5,81.0 L105.0,77.1 L107.8,72.7 L110.0,67.9 L111.4,62.7 L112.1,57.4 L111.9,52.0 L110.9,46.6 L109.0,41.4 L106.4,36.4 L103.0,32.0 L99.0,28.0 L94.4,24.7 L89.3,22.1 L83.8,20.3 L78.1,19.3 L72.3,19.2 L66.5,20.0 L60.8,21.6 L55.4,24.2 L50.5,27.5 L46.1,31.5 L42.3,36.2 L39.3,41.4 L37.0,47.0 L35.7,52.9 L35.2,59.0 L35.7,65.1 L37.1,71.1 L39.3,76.9 L42.5,82.2 L46.4,87.0 L51.0,91.2 L56.2,94.7 L61.8,97.4 L67.8,99.2 L74.1,100.0 L80.4,99.9 L86.6,98.9 L92.7,97.0 L98.4,94.1 L103.6,90.4 L108.2,86.0 L112.1,80.9 L115.1,75.3 L117.4,69.3 L118.7,63.0 L119.0,56.6 L118.4,50.1 L116.8,43.9 L114.3,37.9 L110.9,32.4 L106.7,27.4 L101.8,23.1 L96.3,19.6 L90.4,16.9 L84.1,15.2 L77.6,14.4 L71.1,14.6 L64.6,15.8 L58.4,17.9 L52.6,20.9 L47.3,24.8 L42.7,29.5 L38.7,34.7 L35.6,40.6 L33.4,46.8 L32.2,53.3 L32.0,59.9 L32.7,66.4 L34.4,72.8 L37.1,78.9 L40.6,84.5 L44.9,89.5 L50.0,93.8 L55.6,97.3 L61.7,99.9 L68.1,101.6 L74.7,102.3 L81.4,102.1 L87.9,100.8 L94.2,98.5 L100.0,95.4 L105.4,91.4 L110.0,86.6 L113.9,81.2 L117.0,75.3 L119.2,69.0 L120.3,62.4 L120.5,55.8 L119.7,49.1 L117.9,42.7 L115.1,36.6 L111.5,31.0 L107.1,26.0 L102.0,21.7 L96.2,18.2 L90.1,15.6" fill="none" stroke="#1f6f78" stroke-width="1.5" opacity=".4"/>
+        <circle cx="81.3" cy="44.4" r="3" fill="#1f6f78"/>
+        <circle cx="59.6" cy="43.0" r="3" fill="#1f6f78"/>
+        <circle cx="51.0" cy="70.4" r="3" fill="#1f6f78"/>
+        <circle cx="78.8" cy="90.1" r="3" fill="#1f6f78"/>
+        <circle cx="110.0" cy="67.9" r="3" fill="#1f6f78"/>
+        <circle cx="99.0" cy="28.0" r="3" fill="#1f6f78"/>
+        <circle cx="55.4" cy="24.2" r="3" fill="#1f6f78"/>
+      </svg>
+      <div class="cap" style="margin-top:4px">our system: <strong>nonlinear</strong>, from data</div>
+    </div>
+    <div style="flex:0 0 auto">
+      <div style="text-align:center;color:#5b4ea8"><div style="font-size:.6em;font-weight:700;line-height:1.15">learn a<br>representation</div><svg width="86" height="22" viewBox="0 0 86 22" style="margin-top:2px"><defs><marker id="rarr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="#5b4ea8"/></marker></defs><path d="M2,11 H74" stroke="#5b4ea8" stroke-width="2.4" marker-end="url(#rarr)"/></svg></div>
+    </div>
+    <div style="flex:0 0 auto">
+      <div style="border:1.5px solid #cdd8d9;border-radius:12px;background:#f7fafa;padding:.55em .95em .7em;text-align:left;box-shadow:0 2px 10px rgba(0,0,0,.05)"><div style="font-size:.58em;font-weight:700;color:var(--accent2);letter-spacing:.05em;text-transform:uppercase;text-align:center;margin-bottom:.4em">if the system were linear</div><div style="display:flex;align-items:center;gap:8px;margin:.32em 0;font-size:.72em"><svg viewBox="0 0 18 18" width="15" height="15" stroke="#1f6f78" stroke-width="1.8" stroke-linecap="round"><line x1="3" y1="15" x2="3" y2="9"/><line x1="7" y1="15" x2="7" y2="4"/><line x1="11" y1="15" x2="11" y2="7"/><line x1="15" y1="15" x2="15" y2="11"/></svg><span>spectral analysis</span></div><div style="display:flex;align-items:center;gap:8px;margin:.32em 0;font-size:.72em"><svg viewBox="0 0 18 18" width="15" height="15" fill="none" stroke="#1f6f78" stroke-width="1.8" stroke-linecap="round"><path d="M2,13 C5,13 5,6 9,6"/><path d="M9,6 L16,3" stroke-dasharray="2 2"/></svg><span>forecast / prediction</span></div><div style="display:flex;align-items:center;gap:8px;margin:.32em 0;font-size:.72em"><svg viewBox="0 0 18 18" width="15" height="15" fill="none" stroke="#1f6f78" stroke-width="1.8"><path d="M3,4 C4,14 14,14 15,4" stroke-linecap="round"/><circle cx="9" cy="12.3" r="1.6" fill="#1f6f78" stroke="none"/></svg><span>convex optimal control</span></div><div style="display:flex;align-items:center;gap:8px;margin:.32em 0;font-size:.72em"><svg viewBox="0 0 18 18" width="15" height="15" fill="none" stroke="#1f6f78" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3,9 L7,13 L15,4"/></svg><span>stability guarantees</span></div></div>
+    </div>
+  </div>
+  <p class="small center muted" style="margin-top:.9em">Linear systems come with this whole toolbox <strong>but only if the system is linear</strong>.</p>
+  <div class="box small center fragment fade-up" style="margin-top:.5em"><strong>Driving question:</strong> can we <em>learn a representation</em> in which a nonlinear system becomes <strong>linear</strong>?</div>
+  <aside class="notes">We observe a nonlinear system only through data, and want to predict AND control it. Linear systems give a full analysis toolbox — spectral analysis, forecasting, convex optimal control, stability certificates — but only if the system is linear. Idea: change the representation (observables g(x)) so the dynamics become linear, then inherit all of that. → Koopman / PK-NN.</aside>
+</section>
+
+<!-- ============ P1·1 — THE PROBLEM ============ -->
+<section>
+  <h2>The problem: data-driven prediction &amp; control</h2>
+  <p class="small" style="margin-top:1.8em">We have only <strong>trajectory data</strong> from an <strong>unknown</strong> transition map
+  \( \boldsymbol x_{n+1}=\boldsymbol f(\boldsymbol x_n,\boldsymbol u_n) \) — state \(\boldsymbol x\in X\),
+  parameter / control \(\boldsymbol u\in U\). Two problems are posed on \(\boldsymbol f\):</p>
+
+  <div class="row top" style="margin-top:1.5em">
+    <div class="col">
+      <div class="small" style="line-height:1.55"><span style="color:var(--accent2);font-weight:700">Forward prediction</span><br>
+      <span class="muted">Data:</span> \(\{\boldsymbol x_n,\boldsymbol u_n, \boldsymbol x_{n+1}\}\)<br>
+      <span class="muted">Goal:</span> given \(\boldsymbol x_0,\{\boldsymbol u_i\}\), predict \(\{\boldsymbol x_i\}\).</div>
+    </div>
+    <div class="col">
+      <div class="small" style="line-height:1.55"><span style="color:var(--accent2);font-weight:700">Optimal control</span><br>
+      <span class="muted">Data:</span> \(\{\boldsymbol x_n,\boldsymbol u_n, \boldsymbol x_{n+1}\}\)<br>
+      <span class="muted">Goal:</span> given \(\boldsymbol x_0\) and a cost, find \(\{\boldsymbol u_n\}\) minimizing it.</div>
+    </div>
+  </div>
+
+  <div class="box small center fragment fade-up" style="margin-top:1.5em">
+    Two obstacles for data-driven modelling: <strong>non-linearity</strong> &amp; <strong>high dimensionality</strong>.
+  </div>
+</section>
+
+<!-- ============ P1·2 — KOOPMAN: LINEAR, FINITE INVARIANT SUBSPACE ============ -->
+<section>
+  <h2>Koopman: a finite, <em>linear</em> invariant subspace</h2>
+  <div class="row top">
+    <div class="col">
+      <p class="small">Track <strong>observables</strong> \(g(\boldsymbol x)\) instead of the state. The <strong>Koopman operator</strong> \(\mathcal K\) advances any observable <em>linearly</em>:&nbsp;
+      \(g(\boldsymbol x_{n+1})=(\mathcal K g)(\boldsymbol x_n)\).</p>
+      <p class="small">We keep only a chosen dictionary \(\boldsymbol\Psi=(\psi_1,\dots,\psi_m)\) spanning a finite <strong>invariant</strong> subspace \(S\):&nbsp; \(\mathcal K\,S\subset S\).</p>
+      <div class="box alt small">On \(S\), \(\mathcal K\) becomes a finite <strong>matrix</strong> \(K\) (basis \(\boldsymbol\Psi\)) — the <strong>Koopman decomposition</strong>:
+      \[ \boldsymbol\Psi(\boldsymbol x_{n+1})=K\,\boldsymbol\Psi(\boldsymbol x_n) \]</div>
+      <p class="small center muted" style="margin-top:.5em">finite-dim non-linear → infinite-dim <strong>linear</strong>; DL handles high dimensions.</p>
+    </div>
+    <div class="col">
+      <img class="fig" src="img/p2_koopman_lift.png" style="width:100%">
+      <div class="cap">Nonlinear state space → flat observable space, where \(\mathcal K\) is linear.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ P1·4b — STUART–LANDAU: NONLINEAR LIMIT CYCLE ============ -->
+<section>
+  <h2>A less trivial example: a <span style="color:var(--accent)">nonlinear</span> <span style="color:var(--accent2)">limit cycle</span></h2>
+  <div class="row" style="margin-top:2.2em">
+    <div class="col">
+      <p class="small">A limit-cycle system (<strong>Stuart–Landau</strong>):</p>
+      <div class="box small">\[ \begin{aligned}
+        \dot x&=(1-x^2-y^2)\,x-\omega y\\[1pt]
+        \dot y&=\omega x+(1-x^2-y^2)\,y
+      \end{aligned} \]</div>
+      <p class="small">With \(r^2=x^2+y^2\), the polar form decouples:</p>
+      <div class="box alt small", style="margin-top:.5em">\[ \dot r={\color{#1f6f78}r(1-r^2)},\qquad \dot\theta={\color{#5b4ea8}\omega} \]</div>
+      <!-- <div class="small" style="margin-top:.5em;line-height:1.5">
+        <span style="color:var(--accent);font-weight:700">▌</span> nonlinear amplitude relaxation<br>
+        <span style="color:var(--accent2);font-weight:700">▌</span> uniform phase rotation
+      </div> -->
+    </div>
+    <div class="col">
+      <svg class="fig" viewBox="0 0 320 300" style="height:238px;width:auto;max-width:100%;display:block;margin:0 auto;padding:4px;box-sizing:border-box"
+           xmlns="http://www.w3.org/2000/svg" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+        <defs>
+          <marker id="spt" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L5,3 L0,6 z" fill="#1f6f78"/></marker>
+          <marker id="spg" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L5,3 L0,6 z" fill="#5a6b75"/></marker>
+          <marker id="axp" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L5,3 L0,6 z" fill="#999"/></marker>
+        </defs>
+        <line x1="14" y1="150" x2="306" y2="150" stroke="#aaa" stroke-width="1" marker-end="url(#axp)"/>
+        <line x1="160" y1="294" x2="160" y2="10" stroke="#aaa" stroke-width="1" marker-end="url(#axp)"/>
+        <text x="297" y="169" font-size="19" fill="#777" font-style="italic" paint-order="stroke" stroke="#fff" stroke-width="3.5" stroke-linejoin="round">x</text>
+        <text x="168" y="26" font-size="19" fill="#777" font-style="italic" paint-order="stroke" stroke="#fff" stroke-width="3.5" stroke-linejoin="round">y</text>
+        <circle cx="160" cy="150" r="92" fill="none" stroke="#5b4ea8" stroke-width="2.5"/>
+        <g fill="none" stroke="#1f6f78" stroke-width="1.6">
+          <path d="M 184.2,136.8 L 183.4,133.0 L 181.9,129.2 L 179.8,125.5 L 177.2,122.1 L 174.0,118.9 L 170.2,116.1 L 165.9,113.8 L 161.2,112.0 L 156.2,110.9 L 150.9,110.4 L 145.4,110.7 L 139.8,111.8 L 134.3,113.7 L 128.9,116.4 L 123.8,119.8 L 119.1,124.1 L 114.9,129.0 L 111.4,134.6 L 108.5,140.8 L 106.5,147.5 L 105.3,154.6 L 105.1,161.9 L 105.8,169.3 L 107.6,176.8 L 110.5,184.1 L 114.3,191.0 L 119.2,197.6 L 125.0,203.6 L 131.6,208.8 L 139.1,213.2 L 147.2,216.7 L 155.8,219.1 L 164.9,220.3 L 174.2,220.4 L 183.6,219.2 L 193.0,216.7 L 202.0,213.0 L 210.7,208.0 L 218.7,201.8 L 226.0,194.5 L 232.4,186.1 L 237.7,176.9 L 241.8,166.9 L 244.6,156.2 L 246.0,145.2 L 245.9,133.9" marker-end="url(#spt)"/>
+          <path d="M 135.8,163.2 L 136.6,167.0 L 138.1,170.8 L 140.2,174.5 L 142.8,177.9 L 146.0,181.1 L 149.8,183.9 L 154.1,186.2 L 158.8,188.0 L 163.8,189.1 L 169.1,189.6 L 174.6,189.3 L 180.2,188.2 L 185.7,186.3 L 191.1,183.6 L 196.2,180.2 L 200.9,175.9 L 205.1,171.0 L 208.6,165.4 L 211.5,159.2 L 213.5,152.5 L 214.7,145.4 L 214.9,138.1 L 214.2,130.7 L 212.4,123.2 L 209.5,115.9 L 205.7,109.0 L 200.8,102.4 L 195.0,96.4 L 188.4,91.2 L 180.9,86.8 L 172.8,83.3 L 164.2,80.9 L 155.1,79.7 L 145.8,79.6 L 136.4,80.8 L 127.0,83.3 L 118.0,87.0 L 109.3,92.0 L 101.3,98.2 L 94.0,105.5 L 87.6,113.9 L 82.3,123.1 L 78.2,133.1 L 75.4,143.8 L 74.0,154.8 L 74.1,166.1" marker-end="url(#spt)"/>
+        </g>
+        <g fill="none" stroke="#1f6f78" stroke-width="1.5">
+          <path d="M 160.0,19.4 L 143.3,21.3 L 127.1,25.3 L 111.7,31.3 L 97.3,39.2 L 84.0,48.8 L 72.3,60.0 L 62.1,72.6 L 53.7,86.2 L 47.1,100.7 L 42.5,115.9 L 39.9,131.4 L 39.3,147.0 L 40.8,162.4 L 44.2,177.4 L 49.4,191.8 L 56.4,205.3 L 65.1,217.6 L 75.1,228.7 L 86.5,238.3 L 98.9,246.3 L 112.1,252.6 L 125.9,257.1 L 140.1,259.8 L 154.4,260.6 L 168.6,259.6 L 182.5,256.8 L 195.7,252.2 L 208.2,246.0 L 219.7,238.4 L 230.0,229.4 L 239.0,219.2 L 246.5,208.0 L 252.5,196.0 L 256.9,183.5 L 259.5,170.6 L 260.5,157.6 L 259.9,144.7 L 257.5,132.0 L 253.6,119.9 L 248.2,108.5" marker-end="url(#spt)"/>
+          <path d="M 160.0,280.6 L 176.7,278.7 L 192.9,274.7 L 208.3,268.7 L 222.7,260.8 L 236.0,251.2 L 247.7,240.0 L 257.9,227.4 L 266.3,213.8 L 272.9,199.3 L 277.5,184.1 L 280.1,168.6 L 280.7,153.0 L 279.2,137.6 L 275.8,122.6 L 270.6,108.2 L 263.6,94.7 L 254.9,82.4 L 244.9,71.3 L 233.5,61.7 L 221.1,53.7 L 207.9,47.4 L 194.1,42.9 L 179.9,40.2 L 165.6,39.4 L 151.4,40.4 L 137.5,43.2 L 124.3,47.8 L 111.8,54.0 L 100.3,61.6 L 90.0,70.6 L 81.0,80.8 L 73.5,92.0 L 67.5,104.0 L 63.1,116.5 L 60.5,129.4 L 59.5,142.4 L 60.1,155.3 L 62.5,168.0 L 66.4,180.1 L 71.8,191.5" marker-end="url(#spt)"/>
+        </g>
+        <text x="158" y="42" font-size="17" fill="#5b4ea8" font-style="italic" paint-order="stroke" stroke="#fff" stroke-width="4" stroke-linejoin="round">r = 1 (limit cycle)</text>
+        <line x1="176" y1="47" x2="171" y2="62" stroke="#5b4ea8" stroke-width="0.9"/>
+      </svg>
+      <div class="small" style="margin-top:.5em">
+        The amplitude relaxes <em>nonlinearly</em>, while the phase rotates uniformly.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ P1·4c — KOOPMAN COORDINATES: DECAY + ROTATION ============ -->
+<section>
+  <h2>Koopman coordinates separate <span style="color:var(--accent)">decay</span> and <span style="color:var(--accent2)">rotation</span></h2>
+  <div class="row top">
+    <div class="col">
+      <p class="small">Observables \(\psi_a\) (amplitude), \((\psi_c,\psi_s)\) (phase):</p>
+      <div class="box small">\[ \psi_a=\tfrac{1}{r^2}-1,\ \ \psi_c=\cos\theta,\ \ \psi_s=\sin\theta \]</div>
+      <p class="small" style="margin-bottom:.15em">The linear evolution on the observables:</p>
+      <div class="box alt small">
+        \[ \begin{aligned}
+        &\dot{\boldsymbol\Psi}=A\boldsymbol\Psi,\quad A=\begin{pmatrix}{\color{#1f6f78}-2}&0&0\\ 0&0&{\color{#5b4ea8}-\omega}\\ 0&{\color{#5b4ea8}\omega}&0\end{pmatrix}\\[5pt]
+        &\boldsymbol\Psi_{n+1}=K\boldsymbol\Psi_n\\ &K=e^{A\Delta t}=\begin{pmatrix}{\color{#1f6f78}e^{-2\Delta t}}&0&0\\ 0&{\color{#5b4ea8}\cos\omega\Delta t}&{\color{#5b4ea8}-\sin\omega\Delta t}\\ 0&{\color{#5b4ea8}\sin\omega\Delta t}&{\color{#5b4ea8}\cos\omega\Delta t}\end{pmatrix}
+        \end{aligned} \]</div>
+    </div>
+    <div class="col">
+      <svg class="fig" viewBox="0 0 300 270" style="height:270px;width:auto;max-width:100%;display:block;margin:0 auto;padding:6px;box-sizing:border-box"
+           xmlns="http://www.w3.org/2000/svg" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+        <defs>
+          <marker id="cyt" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L5,3 L0,6 z" fill="#1f6f78"/></marker>
+          <marker id="cyv" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L5,3 L0,6 z" fill="#888"/></marker>
+        </defs>
+        <!-- cylinder body -->
+        <line x1="78" y1="86" x2="78" y2="210" stroke="#c7c7c7" stroke-width="1"/>
+        <line x1="222" y1="86" x2="222" y2="210" stroke="#c7c7c7" stroke-width="1"/>
+        <ellipse cx="150" cy="210" rx="72" ry="20" fill="none" stroke="#d2d2d2" stroke-width="1" stroke-dasharray="3 3"/>
+        <ellipse cx="150" cy="86" rx="72" ry="20" fill="#f7fafa" stroke="#bbb" stroke-width="1"/>
+        <!-- spiral trajectory -->
+        <path d="M 222.0,86.0 L 220.2,82.7 L 214.9,79.6 L 206.4,76.9 L 195.1,74.9 L 181.6,73.6 L 166.4,73.2 L 150.5,73.8 L 134.5,75.4 L 119.3,77.9 L 105.7,81.4 L 94.2,85.6 L 85.5,90.4 L 80.0,95.7 L 78.0,101.3 L 79.6,106.8 L 84.6,112.2 L 93.0,117.1 L 104.1,121.4 L 117.5,125.0 L 132.6,127.6 L 148.5,129.3 L 164.5,130.0 L 179.7,129.8 L 193.5,128.6 L 205.2,126.6 L 214.0,124.0 L 219.7,121.0 L 222.0,117.7 L 220.6,114.3 L 215.8,111.2 L 207.7,108.5 L 196.7,106.3 L 183.4,104.9 L 168.4,104.4 L 152.5,104.9 L 136.5,106.4 L 121.2,108.8 L 107.3,112.1 L 95.5,116.3 L 86.4,121.1 L 80.5,126.3 L 78.1,131.8 L 79.2,137.4 L 83.8,142.8 L 91.8,147.8 L 102.6,152.2 L 115.8,155.8 L 130.6,158.6 L 146.5,160.4 L 162.5,161.3 L 177.9,161.1 L 191.9,160.0 L 203.8,158.2 L 213.1,155.6 L 219.2,152.6 L 221.9,149.3 L 221.0,146.0 L 216.6,142.8 L 208.8,140.0 L 198.2,137.8 L 185.1,136.3 L 170.3,135.7 L 154.5,136.0 L 138.5,137.4 L 123.0,139.7 L 108.9,142.9 L 96.8,147.0 L 87.4,151.7 L 81.1,156.9 L 78.2,162.4 L 78.8,167.9 L 83.1,173.4 L 90.6,178.4 L 101.1,182.9 L 114.0,186.7 L 128.7,189.6 L 144.5,191.5 L 160.5,192.5 L 176.0,192.4 L 190.3,191.5 L 202.5,189.7 L 212.1,187.2 L 218.6,184.3 L 221.7,181.0 L 221.3,177.7 L 217.3,174.5 L 210.0,171.6 L 199.7,169.3 L 186.9,167.7 L 172.2,167.0" fill="none" stroke="#1f6f78" stroke-width="1.6" marker-end="url(#cyt)"/>
+        <!-- limit-cycle ring at psi_a = 0 -->
+        <ellipse cx="150" cy="186" rx="72" ry="20" fill="none" stroke="#5b4ea8" stroke-width="3"/>
+        <!-- psi_a axis -->
+        <line x1="40" y1="206" x2="40" y2="64" stroke="#888" stroke-width="1" marker-end="url(#cyv)"/>
+        <g paint-order="stroke" stroke="#fff" stroke-width="3.4" stroke-linejoin="round">
+          <text x="26" y="54" font-size="17" fill="#444" font-style="italic">ψ<tspan baseline-shift="sub" font-size="11">a</tspan></text>
+          <text x="2" y="128" font-size="12.5" fill="#1f6f78">exponential</text>
+          <text x="2" y="144" font-size="12.5" fill="#1f6f78">decay</text>
+          <text x="150" y="54" font-size="14.5" fill="#5b4ea8" text-anchor="middle" font-style="italic">uniform rotation ↻</text>
+          <text x="150" y="80" font-size="13.5" fill="#444" text-anchor="middle">ψ<tspan baseline-shift="sub" font-size="9">c</tspan>²+ψ<tspan baseline-shift="sub" font-size="9">s</tspan>²=1</text>
+          <text x="208" y="192" font-size="13" fill="#5b4ea8" font-style="italic">ψ<tspan baseline-shift="sub" font-size="9">a</tspan>=0 ⟺ r=1</text>
+        </g>
+      </svg>
+      <div class="small fragment fade-up" style="margin-top:.7em">
+        The lifted states still form a <strong>two-dimensional invariant manifold</strong>:
+        <ul style="margin:.45em 0 0 1.2em; padding:0;">
+          <li>No increase in intrinsic dimension.</li>
+          <li>Linear evolution in observable space.</li>
+        </ul>
+      </div>
+      <!-- <div class="box small" style="margin-top:.7em">
+        The lifted states still form a <strong>two-dimensional invariant manifold</strong> — lifting does not increase the intrinsic dimension; it makes the observable dynamics <em>linear</em>.
+      </div> -->
+      <!-- <p class="xsmall muted" style="margin-top:.3em">Coordinates defined for \(r&gt;0\), away from the unstable equilibrium at the origin.</p> -->
+    </div>
+  </div>
+</section>
+
+<!-- ============ P1·4d — PENDULUM: CLOSURE IS NOT GENERIC ============ -->
+<section>
+  <h2>Finite-dimensional closure is <span style="color:var(--accent2)">not generic</span></h2>
+  <div class="row" style="align-items:center">
+    <div class="col">
+      <p class="small">Nonlinear <strong>pendulum</strong>:</p>
+      <div class="box small">\[ \dot\theta=v,\qquad \dot v=-\sin\theta \]</div>
+      <p class="small">Start from a finite dictionary:</p>
+      <div class="box small">\[ \boldsymbol\Psi=(\theta,\;v,\;\sin\theta,\;\cos\theta)^\top \]</div>
+      <p class="small" style="margin-top:.5em">Differentiating keeps producing <em>new</em> observables: the dictionary <strong>never closes</strong>.</p>
+    </div>
+    <div class="col">
+      <div class="box small" style="margin-top:0">\[ \begin{aligned}
+        \tfrac{d}{dt}\sin\theta&={\color{#5b4ea8}v\cos\theta}\\[1pt]
+        \tfrac{d}{dt}\cos\theta&={\color{#5b4ea8}-v\sin\theta}
+      \end{aligned} \]</div>
+      <div class="box small">\[ \begin{aligned}
+        \tfrac{d}{dt}(v\cos\theta)&=-{\color{#5b4ea8}\sin\theta\cos\theta}-{\color{#5b4ea8}v^2\sin\theta}\\[1pt]
+        \tfrac{d}{dt}(v\sin\theta)&=-{\color{#5b4ea8}\sin^2\theta}+{\color{#5b4ea8}v^2\cos\theta}
+      \end{aligned} \]</div>
+      <div class="box small" style="margin-top:.2em">\[ \begin{aligned}
+        \sin\theta,\cos\theta \;&\to\; v\cos\theta,\ v\sin\theta\\[1pt]
+        &\to\; v^2\sin\theta,\ v^2\cos\theta,\ \sin\theta\cos\theta,\ \cdots
+      \end{aligned} \]</div>
+      <p class="small center muted" style="margin-top:.1em">The observable hierarchy keeps growing.</p>
+    </div>
+  </div>
+  <div class="box alt small center fragment" style="max-width:920px;margin:.2em auto 0">
+    The Koopman operator is always <em>linear</em>, but its invariant observable space is generally
+    <span style="color:var(--accent2);font-weight:700">infinite-dimensional</span>.
+  </div>
+  <p class="small center muted fragment" style="margin-top:.1em">Finite-dimensional Koopman models are therefore often <strong>approximations</strong>, not exact closures.</p>
+</section>
+
+<!-- ============ P1·5 — PK-NN METHOD + COMPARISON TABLE ============ -->
+<section>
+  <h2>PK-NN: learn \(\boldsymbol\Psi\) and \(K(\boldsymbol u)\) jointly</h2>
+  <p class="small">For <strong>parametric</strong> systems \(\mathcal K\) depends on \(\boldsymbol u\), PK-NN learns one shared <strong>dictionary \(\boldsymbol\Psi\)</strong> and a <strong>fully nonlinear operator \(K(\boldsymbol u)\)</strong>.</p>
+  <div class="row top">
+    <div class="col" style="flex:1.25">
+      <div class="clicksteps">
+        <table class="compact">
+          <tr><th>Model</th><th>Form</th><th></th></tr>
+          <tr><td>Optimized DMD</td><td>\( \boldsymbol x_{n+1}=K\boldsymbol x_n \)</td><td>M0</td></tr>
+          <tr><td>EDMD / EDMD-DL</td><td>\( \boldsymbol\Psi(\boldsymbol x_{n+1})=K\,\boldsymbol\Psi(\boldsymbol x_n) \)</td><td>M1</td></tr>
+          <tr><td>Linear control</td><td>\( \boldsymbol\Psi_{n+1}=A\boldsymbol\Psi_n+B\boldsymbol u_n \)</td><td>M2</td></tr>
+          <tr><td>Bilinear</td><td>\( \boldsymbol\Psi_{n+1}=A\boldsymbol\Psi_n+\textstyle\sum_i B_i u_{n,i}\boldsymbol\Psi_n \)</td><td>M3</td></tr>
+          <tr><td>Fixed-basis param</td><td>\( \boldsymbol\Psi_{n+1}=\textstyle\sum_i h_i(\boldsymbol u_n)K_i\,\boldsymbol\Psi_n \)</td><td>M4</td></tr>
+          <tr class="ours"><td>Ours (PK-NN)</td><td>\( \boldsymbol\Psi(\boldsymbol x_{n+1})=K(\boldsymbol u_n)\,\boldsymbol\Psi(\boldsymbol x_n) \)</td><td>Ours</td></tr>
+        </table>
+        <button class="stepbtn" type="button">▸ comparison</button>
+        <div style="font-size:.5em;margin-top:.3em;line-height:1.5">
+          <div class="step" data-step="1"><strong>vs M0, M1:</strong> adds <em>parameter</em> \(\boldsymbol u\)</div>
+          <div class="step" data-step="2"><strong>vs M2, M3:</strong> <em>nonlinear</em> in \(\boldsymbol u\) (not linear / bilinear)</div>
+          <div class="step" data-step="3"><strong>vs M4:</strong> a <em>neural net</em> learns the nonlinearity in \(\boldsymbol u\)</div>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <img class="fig" src="img/p2_nn_structure.png" style="width:100%;margin-top:.6em">
+      <div class="lossfml" style="text-align:center;margin-top:.5em">\[ \min_{{\color{#1f6f78}\theta_\Psi},\,{\color{#5b4ea8}\theta_K}}\ \sum_{n,j}\big\|\,\boldsymbol\Psi(\boldsymbol x_{n+1}^{(j)};{\color{#1f6f78}\theta_\Psi})-K(\boldsymbol u_n^{(j)};{\color{#5b4ea8}\theta_K})\,\boldsymbol\Psi(\boldsymbol x_n^{(j)};{\color{#1f6f78}\theta_\Psi})\,\big\|^2 \]</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ P1·6 — BOTH: PREDICTION & CONTROL (MPC) ============ -->
+<section>
+  <h2>We solve <em>both</em>: forward prediction &amp; optimal control</h2>
+  <div class="row top">
+    <div class="col">
+      <img class="fig" src="img/p2_pk_pred.png" style="height:280px;width:auto;max-width:100%;display:block;margin:2.4em auto 0">
+      <div class="cap" style="margin-top:30px"><strong>Forward prediction</strong> — lift, step with \(K(\boldsymbol u_n)\), read out \(\hat{\boldsymbol y}=B\boldsymbol\Psi\).</div>
+    </div>
+    <div class="col">
+      <img class="fig" src="img/p2_mpc.png" style="height:280px;width:auto;max-width:100%;display:block;margin:2.4em auto 0">
+      <div class="cap" style="margin-top:30px"><strong>Optimal control (MPC)</strong> — optimize \(\{\boldsymbol u_n\}\) to track a reference.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ P1·R1 — RESULTS: PREDICTION ============ -->
+<section>
+  <div class="kicker">Experiments · prediction</div>
+  <h2>Prediction under strong nonlinearity in \(\boldsymbol u\)</h2>
+  <div class="row top">
+    <div class="col" style="flex:1.15">
+      <img class="fig" src="img/p2_vdpm.png" style="width:100%">
+      <div class="cap">Van der Pol–Mathieu — error vs. step, as nonlinearity in \(u\) increases.</div>
+    </div>
+    <div class="col">
+      <p class="small">Van der Pol–Mathieu; \(\mu\) controls how nonlinearly the control \(u\) enters:</p>
+      <div class="box small">\[ \begin{aligned}
+        \dot x_1&=x_2\\[1pt]
+        \dot x_2&=(2-2x_1^2)\,x_2-(1+2\mu\,u^2-\mu)\,x_1+u
+      \end{aligned} \]</div>
+      <p class="small"><strong>Advantage:</strong> the fully nonlinear \(K(\boldsymbol u)\) stays accurate as \(\mu\) grows and generalizes to <strong>unseen parameters</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ P1·R3 — RESULTS: OPTIMAL CONTROL (KdV TRACKING) ============ -->
+<section>
+  <div class="kicker">Experiments · control</div>
+  <h2>Optimal control — forced KdV (MPC)</h2>
+  <div class="row" style="align-items:center;margin-top:.9em">
+    <div class="col" style="flex:1.1">
+      <img class="fig" src="img/p2_kdv_track.png" style="width:100%">
+      <div class="cap"><strong>Ours</strong> (solid) follows the step reference (dashed); baselines M2 / M3 lag.</div>
+    </div>
+    <div class="col">
+      <p class="small" style="margin:.3em 0">Forced KdV — control \(u\) enters nonlinearly:</p>
+      <div class="box small" style="margin:.3em 0">\[ \partial_t\eta+\eta\,\partial_x\eta+\partial_{xxx}\eta=\textstyle\sum_i v_i(x)\sin(\pi u_i) \]</div>
+      <p class="small" style="margin:.3em 0">Track a reference \(r_n\) (momentum \(\int\eta^2dx\)) by <strong>Model Predictive Control</strong> in the lifted space:</p>
+      <div class="box alt small" style="margin:.3em 0">\[ \min_{\{u_n\}}\ \sum_n |\hat r_n-r_n|^2+\lambda\|u_n\|^2 \]</div>
+      <p class="xsmall muted" style="margin:.3em 0">The model reads \(\hat r_n=\boldsymbol c^\top\boldsymbol\Psi(\boldsymbol x_n)\) <em>linearly</em> off the lifted state \(\boldsymbol\Psi_{n+1}=K(\boldsymbol u_n)\boldsymbol\Psi_n\).</p>
+      <!-- <p class="small" style="margin:.3em 0"><strong>Learned from data alone</strong> — no model of the dynamics.</p> -->
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================================== -->
+<!-- PART B — LEARNING THE NUMERICAL MECHANISM (known dynamics, RK-NN)    -->
+<!-- ===================================================================== -->
+
+<!-- ============ SECTION DIVIDER — PART II ============ -->
+<section class="divider center">
+  <div class="title-block">
+    <div class="part-no">Part II · Learning the numerical mechanism</div>
+    <h1>Personalized ODE Integrators</h1>
+  </div>
+  <div class="pub">
+    <div class="line ttl-line"><span class="lbl">Published as</span> <span class="ttl">“Personalized Algorithm Generation: A Case Study in Learning ODE Integrators”</span></div>
+    <div class="line jrnl-line">in <span class="jrnl">SIAM Journal on Scientific Computing</span> (2022)</div>
+    <div class="authors">Yue Guo, Felix Dietrich, Tom Bertalan, Danimir T. Doncevic, Manuel Dahmen, Ioannis G. Kevrekidis, Qianxiao Li</div>
+  </div>
+</section>
+
+<!-- ============ PART 2 FOCUS (no number) ============ -->
+<section class="nonum center">
+   <svg class="fig" viewBox="20 18 815 376" style="width:88%;margin:0 auto;padding:14px 12px"
+        xmlns="http://www.w3.org/2000/svg" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+     <defs>
+       <marker id="ah2" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L7,3 L0,6 z" fill="#666"/></marker>
+       <marker id="ahP2" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L7,3 L0,6 z" fill="#7F77DD"/></marker>
+       <marker id="ahB2" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L7,3 L0,6 z" fill="#004C99"/></marker>
+     </defs>
+     <g font-weight="bold">
+       <path d="M160,230 H195" fill="none" stroke="#666" stroke-width="1.6"/>
+       <path d="M645,230 H686" fill="none" stroke="#666" stroke-width="1.6" marker-end="url(#ah2)"/>
+       <circle cx="200" cy="230" r="5" fill="#666"/>
+       <circle cx="640" cy="230" r="5" fill="#666"/>
+       <rect x="40" y="200" width="120" height="60" rx="8" fill="#f5f5f5" stroke="#666"/>
+       <text x="100" y="224" text-anchor="middle" font-size="16" fill="#333">Dynamical</text>
+       <text x="100" y="244" text-anchor="middle" font-size="16" fill="#333">system</text>
+       <rect x="690" y="200" width="120" height="60" rx="8" fill="#f5f5f5" stroke="#666"/>
+       <text x="750" y="224" text-anchor="middle" font-size="16" fill="#333">Predicted</text>
+       <text x="750" y="244" text-anchor="middle" font-size="16" fill="#333">trajectory</text>
+     </g>
+     <g font-weight="bold">
+       <rect x="230" y="30" width="380" height="110" rx="10" fill="none" stroke="#999" stroke-width="2" stroke-dasharray="8 4"/>
+       <text x="420" y="50" text-anchor="middle" font-size="15" fill="#444" font-weight="normal">Known dynamics</text>
+       <path d="M200,225 V95 H274" fill="none" stroke="#666" stroke-width="1.6" marker-end="url(#ah2)"/>
+       <path d="M580,95 H640 V230" fill="none" stroke="#666" stroke-width="1.6"/>
+       <rect x="280" y="70" width="100" height="50" rx="8" fill="#f5f5f5" stroke="#666"/>
+       <text x="330" y="100" text-anchor="middle" font-size="15" fill="#333">Equation</text>
+       <path d="M380,95 H416" fill="none" stroke="#7F77DD" stroke-width="1.6" marker-end="url(#ahP2)"/>
+       <rect x="420" y="70" width="160" height="50" rx="8" fill="#E8E5FD" stroke="#7F77DD"/>
+       <text x="500" y="100" text-anchor="middle" font-size="15" fill="#5046A8">Learn integrator</text>
+     </g>
+     <g font-weight="bold">
+       <rect x="230" y="160" width="380" height="220" rx="10" fill="none" stroke="#999" stroke-width="2" stroke-dasharray="8 4"/>
+       <text x="420" y="180" text-anchor="middle" font-size="15" fill="#444" font-weight="normal">Unknown dynamics</text>
+       <path d="M206,230 H276" fill="none" stroke="#666" stroke-width="1.6" marker-end="url(#ah2)"/>
+       <path d="M580,230 H636" fill="none" stroke="#666" stroke-width="1.6"/>
+       <path d="M200,235 V335 H276" fill="none" stroke="#666" stroke-width="1.6" marker-end="url(#ah2)"/>
+       <path d="M580,335 H640 V230" fill="none" stroke="#666" stroke-width="1.6"/>
+       <rect x="280" y="205" width="300" height="50" rx="8" fill="#E1F5EE" stroke="#1D9E75"/>
+       <text x="430" y="235" text-anchor="middle" font-size="15" fill="#0F6E56">Learn representation of evolution</text>
+       <rect x="280" y="310" width="170" height="50" rx="8" fill="#BCEBFF" stroke="#004C99"/>
+       <text x="365" y="340" text-anchor="middle" font-size="15" fill="#004C99">Learn equation</text>
+       <path d="M450,335 H486" fill="none" stroke="#004C99" stroke-width="1.6" marker-end="url(#ahB2)"/>
+       <rect x="490" y="310" width="90" height="50" rx="8" fill="#f5f5f5" stroke="#666"/>
+       <text x="535" y="340" text-anchor="middle" font-size="14" fill="#333">Integrator</text>
+     </g>
+     <ellipse cx="500" cy="95"  rx="99"  ry="41" fill="none" stroke="#bd8593" stroke-width="4"/>
+   </svg>
+</section>
+
+<!-- ============ P2·0 — Part II motivation (example-driven) ============ -->
+<section>
+  <div class="kicker">Motivation · Learning the numerical mechanism</div>
+  <h2>An integrator built for <em>Specific</em> system <span class="tag">RK-NN</span></h2>
+  <div class="row top" style="justify-content:center;align-items:flex-start;gap:40px;margin-top:2.9em">
+    <div style="flex:0 0 auto;text-align:center;max-width:500px">
+      <div style="font-size:.66em;font-weight:700;color:var(--ink);margin-bottom:.4em">Classical Solver: one recipe for <em style="color:var(--accent2)">all f</em></div>
+      <div style="display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px 16px;border:1.6px dashed #b9c4c6;border-radius:14px;background:#fafbfb;padding:12px 16px;max-width:400px"><svg width="48" height="39" viewBox="0 0 42 34" fill="none" stroke="#8794a0" stroke-width="1.7" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><path d="M21.0,17.0 L21.2,16.9 L21.4,16.8 L21.5,16.5 L21.4,16.2 L21.2,15.9 L20.8,15.6 L20.4,15.5 L19.9,15.6 L19.3,15.8 L18.8,16.2 L18.5,16.8 L18.3,17.6 L18.4,18.4 L18.7,19.3 L19.3,20.0 L20.2,20.6 L21.2,20.9 L22.3,20.9 L23.5,20.6 L24.6,19.9 L25.4,18.9 L26.0,17.6 L26.2,16.2 L26.0,14.7 L25.3,13.2 L24.2,12.0 L22.8,11.1 L21.1,10.6 L19.2,10.6 L17.4,11.1 L15.8,12.2 L14.4,13.7 L13.6,15.6 L13.2,17.7 L13.5,19.9 L14.4,22.0 L16.0,23.8 L18.0,25.2"/></svg><svg width="48" height="39" viewBox="0 0 42 34" fill="none" stroke="#8794a0" stroke-width="1.7" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><circle cx="21" cy="17" r="9"/></svg><svg width="48" height="39" viewBox="0 0 42 34" fill="none" stroke="#8794a0" stroke-width="1.7" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><path d="M8,8 Q21,17 34,8"/><path d="M8,26 Q21,17 34,26"/></svg><svg width="48" height="39" viewBox="0 0 42 34" fill="none" stroke="#8794a0" stroke-width="1.7" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><path d="M6,17 q4,-8 8,0 t8,0 t8,0 t8,0"/></svg><svg width="48" height="39" viewBox="0 0 42 34" fill="none" stroke="#8794a0" stroke-width="1.7" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><circle cx="21" cy="17" r="1.9" fill="#8794a0" stroke="none"/><line x1="21" y1="6" x2="21" y2="12"/><line x1="21" y1="28" x2="21" y2="22"/><line x1="10" y1="17" x2="16" y2="17"/><line x1="32" y1="17" x2="26" y2="17"/></svg><svg width="48" height="39" viewBox="0 0 42 34" fill="none" stroke="#8794a0" stroke-width="1.7" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><circle cx="21" cy="17" r="1.9" fill="#8794a0" stroke="none"/><line x1="21.0" y1="12.0" x2="21.0" y2="6.0"/><line x1="21.0" y1="22.0" x2="21.0" y2="28.0"/><line x1="16.0" y1="17.0" x2="10.0" y2="17.0"/><line x1="26.0" y1="17.0" x2="32.0" y2="17.0"/><line x1="17.5" y1="13.5" x2="13.3" y2="9.3"/><line x1="24.5" y1="13.5" x2="28.7" y2="9.3"/><line x1="17.5" y1="20.5" x2="13.3" y2="24.7"/><line x1="24.5" y1="20.5" x2="28.7" y2="24.7"/></svg></div>
+      <div class="cap" style="margin-top:5px">A <strong>worst-case tax</strong>: robust to systems you never solve</div>
+    </div>
+    <div style="flex:0 0 auto;text-align:center">
+      <div style="font-size:.66em;font-weight:700;color:var(--ink);margin-bottom:.4em">Specific family: solved <em style="color:var(--accent)">many times</em></div>
+      <div style="display:inline-flex;justify-content:center;align-items:center;border:2px solid #1f6f78;border-radius:14px;background:#eef6f6;padding:14px 26px"><svg width="48" height="39" viewBox="0 0 42 34" fill="none" stroke="#1f6f78" stroke-width="1.7" stroke-linecap="round" xmlns="http://www.w3.org/2000/svg"><circle cx="21" cy="17" r="10"/><path d="M21.0,17.0 L21.2,16.9 L21.4,16.7 L21.5,16.4 L21.4,16.1 L21.2,15.7 L20.8,15.5 L20.3,15.3 L19.7,15.4 L19.1,15.7 L18.6,16.1 L18.2,16.8 L18.0,17.7 L18.1,18.6 L18.5,19.5 L19.1,20.3 L20.1,21.0 L21.2,21.3 L22.5,21.4 L23.8,21.0 L25.0,20.2 L25.9,19.1 L26.6,17.7 L26.8,16.1 L26.6,14.4 L25.8,12.8 L24.6,11.4 L23.0,10.4 L21.1,9.8 L19.1,9.9 L17.0,10.4 L15.2,11.6 L13.7,13.3 L12.7,15.5" stroke-width="1.2" opacity=".6"/></svg></div>
+      <div class="cap" style="margin-top:5px">Worst-case coefficients are never tuned to it, <br>you pay that tax on every run</div>
+    </div>
+  </div>
+  <!-- <p class="small center muted" style="margin-top:.8em">Robustness is a worst-case tax over <strong>all</strong> \(f\) — no classical method escapes it, and you pay it on <strong>every solve</strong>.</p> -->
+  <div class="box small center fragment fade-up" style="margin-top:1.9em"><strong>Driving question:</strong> can we build (learn) an integrator <em>specialized</em> to the family we actually solve?</div>
+  <aside class="notes">You solve one family of ODEs over and over. Classical RK fixes its coefficients once so the order conditions hold for EVERY possible f — worst-case optimal. That robustness is a permanent tax: you pay, every single run, for accuracy on systems you never touch, and no other classical method avoids it (order conditions are "for all f" by construction). The only way to reclaim it on your family is to specialize the integrator to it. → RK-NN. Next slide formalizes worst-case sup over F vs expectation over the family mu.</aside>
+</section>
+
+<!-- ============ SLIDE 10 — transition / motivation ============ -->
+<section>
+  <div class="kicker">Learning the numerical mechanism · known dynamics</div>
+  <h2>Personalized ODE integrators <span class="tag">RK-NN</span></h2>
+  <div class="row top">
+    <div class="col" style="flex:1.05">
+      <p class="small">Known ODE \(\dot{\boldsymbol y}=\boldsymbol f(\boldsymbol y)\). A numerical <strong>integrator</strong> \(I\) advances the state one step \(h\):&nbsp; \(\boldsymbol y_n\to\boldsymbol y_{n+1}\).</p>
+      <svg class="fig" viewBox="0 0 360 150" style="width:88%;margin:.1em auto 0;display:block"
+           xmlns="http://www.w3.org/2000/svg" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+        <defs><marker id="ia" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L6,3 L0,6 z" fill="#666"/></marker></defs>
+        <circle cx="36" cy="92" r="22" fill="#f5f5f5" stroke="#666" stroke-width="1.4"/>
+        <text x="36" y="92" text-anchor="middle" dominant-baseline="central" font-size="16" font-style="italic">y<tspan baseline-shift="sub" font-size="10">n</tspan></text>
+        <path d="M60,92 H104" fill="none" stroke="#666" stroke-width="1.6" marker-end="url(#ia)"/>
+        <rect x="106" y="64" width="156" height="56" rx="8" fill="#E8E5FD" stroke="#7F77DD" stroke-width="1.4"/>
+        <text x="184" y="92" text-anchor="middle" dominant-baseline="central" font-size="15" font-weight="bold" fill="#5046A8">integrator  I</text>
+        <path d="M264,92 H310" fill="none" stroke="#666" stroke-width="1.6" marker-end="url(#ia)"/>
+        <circle cx="334" cy="92" r="22" fill="#f5f5f5" stroke="#666" stroke-width="1.4"/>
+        <text x="334" y="92" text-anchor="middle" dominant-baseline="central" font-size="14" font-style="italic">y<tspan baseline-shift="sub" font-size="9">n+1</tspan></text>
+        <text x="184" y="26" text-anchor="middle" font-size="14" font-style="italic" fill="#333">f,  h</text>
+        <path d="M184,34 V62" fill="none" stroke="#7F77DD" stroke-width="1.4" marker-end="url(#ia)"/>
+      </svg>
+      <div class="cap">One step, using the known \(\boldsymbol f\).</div>
+      <p class="small center fragment fade-up" style="margin-top:.7em">How should we <em>optimize</em> the integrator \(I\)?</p>
+    </div>
+    <div class="col">
+      <div class="fragment fade-up">
+        <p class="small"><strong>Classical</strong>: \(I\) tuned for the <em>worst case</em> over a large class \(\mathcal F\):</p>
+        <div class="box small">\[ \sup_{F\in\mathcal F}\|L(I,F)\|=\mathcal O(h^{\alpha}) \]</div>
+      </div>
+      <div class="fragment fade-up" style="margin-top:.6em">
+        <p class="small"><strong>Ours</strong>: \(I\) optimized over the <em>family \(\mu\)</em> we actually solve:</p>
+        <div class="box alt small">\[ \mathbb E_{\mu}\|L(I,F_{\mu})\|=\mathcal O(h^{\alpha}) \]</div>
+
+      <p class="small center fade-up" style="margin-top:.6em">⇒ A <em>personalized</em> integrator</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 11a — CLASSICAL RK (by hand) ============ -->
+<section>
+  <h2 style="margin-top:.1em">Classical RK: coefficients fixed <em>by hand</em></h2>
+  <p class="small" style="margin:.12em 0">A <strong>Runge–Kutta</strong> step \(\hat{\boldsymbol y}_{n+1}=\boldsymbol y_n+h\sum_i b_i\boldsymbol k_i\), \(\ \boldsymbol k_i=\boldsymbol f(\boldsymbol y_n+h\sum_j a_{ij}\boldsymbol k_j)\), with coefficients \((a_{ij},b_i)\), \(c_i=\sum_j a_{ij}\).</p>
+  <p class="small" style="margin:.12em 0">Taylor-expand the <em>exact</em> step in the <strong>elementary differentials</strong> (fixed coefficients):</p>
+  <div class="box small" style="margin:.12em 0">\[ \boldsymbol y_{n+1}=\boldsymbol y_n+h\,\boldsymbol f+\tfrac{h^2}{2}\,\boldsymbol f'\boldsymbol f+\tfrac{h^3}{6}\big(\boldsymbol f''\!\boldsymbol f\boldsymbol f+\boldsymbol f'\boldsymbol f'\boldsymbol f\big)+\cdots \]</div>
+  <p class="small fragment fade-up" style="margin:.12em 0">RK expands in <em>the same</em> differentials — match each (for <strong>all</strong> \(\boldsymbol f\)) \(\Rightarrow\) <em>one condition per term</em>:</p>
+  <table class="match fragment fade-up" style="margin:.3em 0 0">
+    <thead>
+      <tr>
+        <th rowspan="2" style="text-align:left">term</th>
+        <th class="matchhead" colspan="2">set these two coefficients equal</th>
+        <th class="eqhead" rowspan="2">⇒ order condition on \((a_{ij},b_i)\)</th>
+      </tr>
+      <tr>
+        <th class="matchhead">in exact \(\boldsymbol y_{n+1}\)</th>
+        <th class="matchhead">in RK \(\hat{\boldsymbol y}_{n+1}\)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td class="term">\(h\,\boldsymbol f\)</td><td class="tc">\(1\)</td><td class="tc">\(\sum_i b_i\)</td><td class="eq">\(\sum_i b_i=1\)</td></tr>
+      <tr><td class="term">\(h^2\,\boldsymbol f'\boldsymbol f\)</td><td class="tc">\(\tfrac12\)</td><td class="tc">\(\sum_i b_i c_i\)</td><td class="eq">\(\sum_i b_i c_i=\tfrac12\)</td></tr>
+      <tr class="h3group"><td class="term">\(h^3\,\boldsymbol f''\!\boldsymbol f\boldsymbol f\)</td><td class="tc">\(\tfrac16\)</td><td class="tc">\(\tfrac12\sum_i b_i c_i^{2}\)</td><td class="eq">\(\tfrac12\sum_i b_i c_i^{2}=\tfrac16\)</td></tr>
+      <tr class="h3group"><td class="term">\(h^3\,\boldsymbol f'\boldsymbol f'\boldsymbol f\)</td><td class="tc">\(\tfrac16\)</td><td class="tc">\(\sum_{ij} b_i a_{ij} c_j\)</td><td class="eq">\(\sum_{ij} b_i a_{ij} c_j=\tfrac16\)</td></tr>
+    </tbody>
+  </table>
+  <div class="box alt small fragment" style="margin:.3em 0 0;padding:.35em .85em">Matched through \(h^3\): the step differs only by the <strong>truncation error</strong> \(\hat{\boldsymbol y}_{n+1}-\boldsymbol y_{n+1}=O(h^4)\).</div>
+</section>
+
+<!-- ============ SLIDE 11b — RK-NN: learn the coefficients ============ -->
+<section>
+  <h2>RK-NN: <em>learn</em> the coefficients \(\boldsymbol\theta\)</h2>
+  <div class="row top">
+    <div class="col" style="flex:1.55">
+      <img class="fig" src="img/p1_rknn_arch.png" style="width:100%;margin-top:1.5em">
+      <div class="cap">The Butcher-tableau coefficients become learnable \(\boldsymbol\theta\) inside an \(m\)-stage RK.</div>
+      <p class="small" style="margin-top:1.1em"><strong>Data:</strong> sample the family \(F_\mu\), initial states \(\boldsymbol y_0\), and steps \(h\in(0.01,0.1)\); the target \(\boldsymbol y_1=\varphi_h(\boldsymbol y_0)\) is the accurate one-step solution of the known \(\boldsymbol f\).</p>
+    </div>
+    <div class="col">
+      <p class="small">Train \(\boldsymbol\theta\) on the loss:</p>
+      <div class="box alt small">\[ \begin{aligned}
+        \mathcal L&=\frac{\|\boldsymbol y_1-\hat{\boldsymbol y}_1\|^2}{\|\boldsymbol y_1-\hat{\boldsymbol y}_1^{(\mathrm{RK})}\|^2}+\lambda\,\mathcal R\\[4pt]
+        \mathcal R&=\sum_{i=1}^{\alpha}\Big\|\tfrac{d^i}{dh^i}\big|_{0}(\boldsymbol y_1-\hat{\boldsymbol y}_1)\Big\|^2
+      \end{aligned} \]</div>
+      <p class="small">\(\mathcal L\): one-step error, scaled by the classical RK error \(\|\boldsymbol y_1-\hat{\boldsymbol y}_1^{(\mathrm{RK})}\|\)<br>\(\mathcal R\): Taylor regularizer enforcing order \(\alpha\).</p>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ RESULTS E — 2-D case studies (Van der Pol & Brusselator) ============ -->
+<section>
+  <h2>RK-NN keeps order 3 yet beats RK3</h2>
+  <p class="small">Two real 2-D nonlinear systems, state \(\boldsymbol y=(u,v)\). A 3-stage RK-NN (\(\alpha=3\)) is trained per family over \(h\in(0.01,0.1)\); outside that range it degrades — <em>specialized by design</em>.</p>
+  <div class="row" style="margin-bottom:.3em">
+    <div class="col"><div class="box alt small"><strong>Van der Pol</strong>
+      \[ \dot u = v,\qquad \dot v = \mu\,(1-u^{2})\,v - u \]
+      <span class="small">limit cycle; nonlinearity set by \(\mu\).</span></div></div>
+    <div class="col"><div class="box alt small"><strong>Brusselator</strong>
+      \[ \dot u = A + u^{2}v - (B{+}1)u,\qquad \dot v = B u - u^{2}v \]
+      <span class="small">autocatalytic reaction with constants \(A,B\).</span></div></div>
+  </div>
+  <div class="row">
+    <div class="col"><img class="fig" src="img/p1_vdp_order.png" style="width:100%"><div class="cap" style="margin-top:-2px">Van der Pol — order check</div></div>
+    <div class="col"><img class="fig" src="img/p1_bru_order.png" style="width:100%"><div class="cap" style="margin-top:-2px">Brusselator — order check</div></div>
+    <div class="col"><img class="fig" src="img/p1_vdp_relerr.png" style="width:100%"><div class="cap" style="margin-top:-2px">Van der Pol — relative error</div></div>
+  </div>
+</section>
+
+<!-- ============ RESULTS D — breaking the order barrier (highlight) ============ -->
+<section>
+  <h2>Highlight: “breaking” the order barrier</h2>
+  <div class="row top">
+    <div class="col">
+      <p class="small" style="margin:0 0 .1em">2-stage scheme, \(k_2{=}f(y{+}h\theta_1 k_1)\):
+        \[ y_{n+1}=y+h(\theta_{c1}k_1+\theta_{c2}k_2) \]</p>
+
+      <div class="box small" style="margin:.15em 0"><strong>Classical: Taylor-match → order 2:</strong>
+        \[ \theta_{c1}+\theta_{c2}=1,\quad 2\,\theta_1\theta_{c2}=1\quad\underset{\text{(Heun)}}{\Rightarrow}\ \theta_1{=}1,\ \theta_{c1}{=}\theta_{c2}{=}\tfrac12 \]
+        Two stages cannot meet both 3rd-order conditions → <strong>order barrier</strong>.</div>
+
+      <div class="box alt small" style="margin:.15em 0"><strong>Ours: for \(f{=}{-}y^2\)</strong>, both 3rd-order terms are \(\propto y^4\), so they merge:
+        <div style="font-size:.84em; margin:.05em 0 -.2em">\[ \begin{aligned}
+          y(t_n{+}h)\ &= y - y^2h + y^3h^2 - {\color{#b5546a}y^4}\,h^3 + O(h^4)\\
+          \hat y_{n+1}\ &= y - (\theta_{c1}{+}\theta_{c2})y^2h + 2\theta_{c2}\theta_1\,y^3h^2\\
+          &\quad\, - {\color{#b5546a}\theta_{c2}\theta_1^2\,y^4}\,h^3 + O(h^4)
+        \end{aligned} \]</div>
+        \(h^3:\ {\color{#b5546a}\theta_{c2}\theta_1^2{=}1}\) (solvable); with \(\theta_{c2}\theta_1{=}\tfrac12\Rightarrow \theta_1{=}2,\ \theta_{c2}{=}\tfrac14,\ \theta_{c1}{=}\tfrac34\).</div>
+
+      <!-- <p class="small center" style="margin:.3em 0 0">
+        <span class="pill"><strong>2-stage RK-NN</strong> order 3</span> &nbsp;vs&nbsp;
+        <span class="pill">standard RK2</span></p> -->
+    </div>
+    <div class="col" style="margin-top:1.5em"><img class="fig" src="img/p1_order_barrier.png" style="width:100%;max-height:540px;object-fit:contain">
+      <div class="cap">2-stage RK-NN attains slope-3 error.</div>
+  </div>
+  </div>
+</section>
+
+<!-- ===================================================================== -->
+<!-- PART C — LEARNING THE CONTINUOUS DESCRIPTION (ModEqLearn)            -->
+<!-- ===================================================================== -->
+
+<!-- ============ SECTION DIVIDER — PART III ============ -->
+<section class="divider p3 center">
+  <div class="title-block">
+    <div class="part-no">Part III · Learning the continuous description</div>
+    <h1>Integrator-aware Learning</h1>
+  </div>
+  <div class="pub">
+    <div class="line ttl-line"><span class="lbl">Manuscript</span> <span class="ttl">“Integrator-aware Learning of Modified Equations”</span></div>
+    <div class="line jrnl-line">in process</div>
+    <div class="authors">Yue Guo, Aiqing Zhu, Haotian Jiang, Qianxiao Li.</div>
+  </div>
+</section>
+
+<!-- ============ PART 3 FOCUS (no number) ============ -->
+<section class="nonum center">
+   <svg class="fig" viewBox="20 18 815 376" style="width:88%;margin:0 auto;padding:14px 12px"
+        xmlns="http://www.w3.org/2000/svg" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+     <defs>
+       <marker id="ah3" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L7,3 L0,6 z" fill="#666"/></marker>
+       <marker id="ahP3" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L7,3 L0,6 z" fill="#7F77DD"/></marker>
+       <marker id="ahB3" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L7,3 L0,6 z" fill="#004C99"/></marker>
+     </defs>
+     <g font-weight="bold">
+       <path d="M160,230 H195" fill="none" stroke="#666" stroke-width="1.6"/>
+       <path d="M645,230 H686" fill="none" stroke="#666" stroke-width="1.6" marker-end="url(#ah3)"/>
+       <circle cx="200" cy="230" r="5" fill="#666"/>
+       <circle cx="640" cy="230" r="5" fill="#666"/>
+       <rect x="40" y="200" width="120" height="60" rx="8" fill="#f5f5f5" stroke="#666"/>
+       <text x="100" y="224" text-anchor="middle" font-size="16" fill="#333">Dynamical</text>
+       <text x="100" y="244" text-anchor="middle" font-size="16" fill="#333">system</text>
+       <rect x="690" y="200" width="120" height="60" rx="8" fill="#f5f5f5" stroke="#666"/>
+       <text x="750" y="224" text-anchor="middle" font-size="16" fill="#333">Predicted</text>
+       <text x="750" y="244" text-anchor="middle" font-size="16" fill="#333">trajectory</text>
+     </g>
+     <g font-weight="bold">
+       <rect x="230" y="30" width="380" height="110" rx="10" fill="none" stroke="#999" stroke-width="2" stroke-dasharray="8 4"/>
+       <text x="420" y="50" text-anchor="middle" font-size="15" fill="#444" font-weight="normal">Known dynamics</text>
+       <path d="M200,225 V95 H274" fill="none" stroke="#666" stroke-width="1.6" marker-end="url(#ah3)"/>
+       <path d="M580,95 H640 V230" fill="none" stroke="#666" stroke-width="1.6"/>
+       <rect x="280" y="70" width="100" height="50" rx="8" fill="#f5f5f5" stroke="#666"/>
+       <text x="330" y="100" text-anchor="middle" font-size="15" fill="#333">Equation</text>
+       <path d="M380,95 H416" fill="none" stroke="#7F77DD" stroke-width="1.6" marker-end="url(#ahP3)"/>
+       <rect x="420" y="70" width="160" height="50" rx="8" fill="#E8E5FD" stroke="#7F77DD"/>
+       <text x="500" y="100" text-anchor="middle" font-size="15" fill="#5046A8">Learn integrator</text>
+     </g>
+     <g font-weight="bold">
+       <rect x="230" y="160" width="380" height="220" rx="10" fill="none" stroke="#999" stroke-width="2" stroke-dasharray="8 4"/>
+       <text x="420" y="180" text-anchor="middle" font-size="15" fill="#444" font-weight="normal">Unknown dynamics</text>
+       <path d="M206,230 H276" fill="none" stroke="#666" stroke-width="1.6" marker-end="url(#ah3)"/>
+       <path d="M580,230 H636" fill="none" stroke="#666" stroke-width="1.6"/>
+       <path d="M200,235 V335 H276" fill="none" stroke="#666" stroke-width="1.6" marker-end="url(#ah3)"/>
+       <path d="M580,335 H640 V230" fill="none" stroke="#666" stroke-width="1.6"/>
+       <rect x="280" y="205" width="300" height="50" rx="8" fill="#E1F5EE" stroke="#1D9E75"/>
+       <text x="430" y="235" text-anchor="middle" font-size="15" fill="#0F6E56">Learn representation of evolution</text>
+       <rect x="280" y="310" width="170" height="50" rx="8" fill="#BCEBFF" stroke="#004C99"/>
+       <text x="365" y="340" text-anchor="middle" font-size="15" fill="#004C99">Learn equation</text>
+       <path d="M450,335 H486" fill="none" stroke="#004C99" stroke-width="1.6" marker-end="url(#ahB3)"/>
+       <rect x="490" y="310" width="90" height="50" rx="8" fill="#f5f5f5" stroke="#666"/>
+       <text x="535" y="340" text-anchor="middle" font-size="14" fill="#333">Integrator</text>
+     </g>
+     <ellipse cx="365" cy="335" rx="104" ry="41" fill="none" stroke="#bd8593" stroke-width="4"/>
+   </svg>
+</section>
+
+<!-- ============ SLIDE 16 — Part III motivation (example-driven) ============ -->
+<section>
+  <div class="kicker">Motivation · Learning the continuous description</div>
+  <h2>Cheap forces, but <em>tiny</em> steps <span class="tag alt">ModEqLearn</span></h2>
+  <div class="row" style="justify-content:center;align-items:center;gap:20px;margin-top:.4em">
+    <div style="flex:0 0 auto;text-align:center"><div class="molviewer" id="mol-ethanol" style="width:196px;height:138px;position:relative;margin:0 auto"></div><div class="cap" style="margin-top:2px">ethanol</div></div>
+    <div style="flex:0 0 auto;text-align:center"><div class="molviewer" id="mol-naphthalene" style="width:196px;height:138px;position:relative;margin:0 auto"></div><div class="cap" style="margin-top:2px">naphthalene</div></div>
+    <div style="flex:0 0 auto;text-align:center"><div class="molviewer" id="mol-aspirin" style="width:196px;height:138px;position:relative;margin:0 auto"></div><div class="cap" style="margin-top:2px">aspirin</div></div>
+  </div>
+  <p class="small" style="margin-top:.15em">ML potentials make the <strong>force per step</strong> cheap</p>
+  <p class="small" style="margin-top:.15em">Molecular motion needs a <strong>tiny \(\Delta t\)</strong> (fs), so a long run takes lots of steps.</p>
+  <div class="row fragment" style="justify-content:flex-start;align-items:center;gap:40px;margin-top:.1em;padding-left:6%">
+    <div style="flex:0 0 auto">
+      <svg viewBox="0 0 176 112" style="width:100%;max-width:196px;height:auto;display:block;margin:0 auto" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+        <line x1="22" y1="94" x2="166" y2="94" stroke="#c7c7c7" stroke-width="1.3"/>
+        <line x1="22" y1="94" x2="22" y2="12" stroke="#c7c7c7" stroke-width="1.3"/>
+        <text x="26" y="20" font-size="10" fill="#777" font-style="italic">trajectory error</text>
+        <text x="150" y="107" font-size="10" fill="#777" font-style="italic">time</text>
+        <path d="M22,86.0 L24,86.0 L26,86.0 L28,86.0 L30,86.0 L32,86.0 L34,85.9 L36,85.8 L38,85.6 L40,85.3 L42,85.0 L44,84.7 L46,84.3 L48,83.9 L50,83.4 L52,82.9 L54,82.4 L56,81.8 L58,81.2 L60,80.5 L62,79.8 L64,79.1 L66,78.4 L68,77.6 L70,76.8 L72,75.9 L74,75.1 L76,74.2 L78,73.3 L80,72.3 L82,71.3 L84,70.3 L86,69.3 L88,68.2 L90,67.1 L92,66.0 L94,64.8 L96,63.7 L98,62.5 L100,61.2 L102,60.0 L104,58.7 L106,57.4 L108,56.1 L110,54.7 L112,53.3 L114,51.9 L116,50.5 L118,49.1 L120,47.6 L122,46.1 L124,44.6 L126,43.0 L128,41.5 L130,39.9 L132,38.3 L134,36.6 L136,35.0 L138,33.3 L140,31.6 L142,29.9 L144,28.1 L146,26.4 L148,24.6 L150,22.8 L152,20.9 L154,19.1 L156,17.2" fill="none" stroke="#cc5a5a" stroke-width="2.5"/>
+        <path d="M22,86.0 L24,85.6 L26,85.3 L28,84.9 L30,84.6 L32,84.4 L34,84.1 L36,84.0 L38,83.9 L40,83.8 L42,83.8 L44,83.9 L46,84.0 L48,84.2 L50,84.4 L52,84.7 L54,85.0 L56,85.3 L58,85.7 L60,86.1 L62,86.4 L64,86.8 L66,87.1 L68,87.4 L70,87.7 L72,87.9 L74,88.0 L76,88.2 L78,88.2 L80,88.2 L82,88.1 L84,88.0 L86,87.8 L88,87.6 L90,87.3 L92,87.0 L94,86.6 L96,86.3 L98,85.9 L100,85.5 L102,85.2 L104,84.8 L106,84.6 L108,84.3 L110,84.1 L112,83.9 L114,83.8 L116,83.8 L118,83.8 L120,83.9 L122,84.0 L124,84.2 L126,84.5 L128,84.8 L130,85.1 L132,85.4 L134,85.8 L136,86.2 L138,86.5 L140,86.9 L142,87.2 L144,87.5 L146,87.7 L148,87.9 L150,88.1 L152,88.2 L154,88.2 L156,88.2" fill="none" stroke="#1f6f78" stroke-width="2.5"/>
+        <text x="120" y="40" text-anchor="end" font-size="10.5" fill="#cc5a5a" font-weight="700">large Δt</text>
+        <text x="150" y="80" text-anchor="end" font-size="10.5" fill="#1f6f78" font-weight="700">tiny Δt</text>
+      </svg>
+    </div>
+    <div class="small" style="flex:1;max-width:900px">Take a <strong>larger \(\Delta t\)</strong> to go faster, and per-step error <strong>accumulates</strong> over the trajectory.</div>
+  </div>
+  <div class="box small center fragment fade-up" style="margin-top:.2em"><strong>Driving question:</strong> can we learn forces accurate at a <em>larger</em> \(\Delta t\)?</div>
+  <script type="text/plain" id="sdf-ethanol">
+702
+  -OEChem-07182604433D
+
+  9  8  0     0  0  0  0  0  0999 V2000
+   -1.1712    0.2997    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0
+   -0.0463   -0.5665    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    1.2175    0.2668    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -0.0958   -1.2120    0.8819 H   0  0  0  0  0  0  0  0  0  0  0  0
+   -0.0952   -1.1938   -0.8946 H   0  0  0  0  0  0  0  0  0  0  0  0
+    2.1050   -0.3720   -0.0177 H   0  0  0  0  0  0  0  0  0  0  0  0
+    1.2426    0.9307   -0.8704 H   0  0  0  0  0  0  0  0  0  0  0  0
+    1.2616    0.9052    0.8886 H   0  0  0  0  0  0  0  0  0  0  0  0
+   -1.1291    0.8364    0.8099 H   0  0  0  0  0  0  0  0  0  0  0  0
+  1  2  1  0  0  0  0
+  1  9  1  0  0  0  0
+  2  3  1  0  0  0  0
+  2  4  1  0  0  0  0
+  2  5  1  0  0  0  0
+  3  6  1  0  0  0  0
+  3  7  1  0  0  0  0
+  3  8  1  0  0  0  0
+M  END
+> <PUBCHEM_COMPOUND_CID>
+702
+
+> <PUBCHEM_CONFORMER_RMSD>
+0.4
+
+> <PUBCHEM_CONFORMER_DIVERSEORDER>
+1
+
+> <PUBCHEM_MMFF94_PARTIAL_CHARGES>
+3
+1 -0.68
+2 0.28
+9 0.4
+
+> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>
+0
+
+> <PUBCHEM_PHARMACOPHORE_FEATURES>
+2
+1 1 acceptor
+1 1 donor
+
+> <PUBCHEM_HEAVY_ATOM_COUNT>
+3
+
+> <PUBCHEM_ATOM_DEF_STEREO_COUNT>
+0
+
+> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>
+0
+
+> <PUBCHEM_BOND_DEF_STEREO_COUNT>
+0
+
+> <PUBCHEM_BOND_UDEF_STEREO_COUNT>
+0
+
+> <PUBCHEM_ISOTOPIC_ATOM_COUNT>
+0
+
+> <PUBCHEM_COMPONENT_COUNT>
+1
+
+> <PUBCHEM_CACTVS_TAUTO_COUNT>
+1
+
+> <PUBCHEM_CONFORMER_ID>
+000002BE00000001
+
+> <PUBCHEM_MMFF94_ENERGY>
+-1.3096
+
+> <PUBCHEM_FEATURE_SELFOVERLAP>
+10.148
+
+> <PUBCHEM_SHAPE_FINGERPRINT>
+139733 1 18410856563987595332
+21015797 1 18192151726869919494
+
+> <PUBCHEM_SHAPE_MULTIPOLES>
+55.87
+1.48
+0.75
+0.58
+0.08
+0.07
+0
+-0.26
+0
+-0.01
+0
+0.04
+0.01
+0
+
+> <PUBCHEM_SHAPE_SELFOVERLAP>
+84.621
+
+> <PUBCHEM_SHAPE_VOLUME>
+41.5
+
+> <PUBCHEM_COORDINATE_TYPE>
+2
+5
+10
+
+$$$$
+  </script>
+  <script type="text/plain" id="sdf-naphthalene">
+931
+  -OEChem-07182604433D
+
+ 18 19  0     0  0  0  0  0  0999 V2000
+    0.0000    0.7076    0.0001 C   0  0  0  0  0  0  0  0  0  0  0  0
+    0.0000   -0.7076    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    1.2250    1.3944    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    1.2250   -1.3944    0.0001 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -1.2250    1.3943    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -1.2250   -1.3943    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+    2.4327    0.6959   -0.0001 C   0  0  0  0  0  0  0  0  0  0  0  0
+    2.4327   -0.6958    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -2.4327    0.6958    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -2.4327   -0.6958   -0.0001 C   0  0  0  0  0  0  0  0  0  0  0  0
+    1.2489    2.4821   -0.0001 H   0  0  0  0  0  0  0  0  0  0  0  0
+    1.2489   -2.4822    0.0001 H   0  0  0  0  0  0  0  0  0  0  0  0
+   -1.2490    2.4821    0.0001 H   0  0  0  0  0  0  0  0  0  0  0  0
+   -1.2489   -2.4822   -0.0001 H   0  0  0  0  0  0  0  0  0  0  0  0
+    3.3732    1.2391   -0.0001 H   0  0  0  0  0  0  0  0  0  0  0  0
+    3.3733   -1.2390   -0.0001 H   0  0  0  0  0  0  0  0  0  0  0  0
+   -3.3732    1.2390    0.0000 H   0  0  0  0  0  0  0  0  0  0  0  0
+   -3.3733   -1.2390   -0.0001 H   0  0  0  0  0  0  0  0  0  0  0  0
+  1  2  1  0  0  0  0
+  1  3  2  0  0  0  0
+  1  5  1  0  0  0  0
+  2  4  2  0  0  0  0
+  2  6  1  0  0  0  0
+  3  7  1  0  0  0  0
+  3 11  1  0  0  0  0
+  4  8  1  0  0  0  0
+  4 12  1  0  0  0  0
+  5  9  2  0  0  0  0
+  5 13  1  0  0  0  0
+  6 10  2  0  0  0  0
+  6 14  1  0  0  0  0
+  7  8  2  0  0  0  0
+  7 15  1  0  0  0  0
+  8 16  1  0  0  0  0
+  9 10  1  0  0  0  0
+  9 17  1  0  0  0  0
+ 10 18  1  0  0  0  0
+M  END
+> <PUBCHEM_COMPOUND_CID>
+931
+
+> <PUBCHEM_CONFORMER_RMSD>
+0.4
+
+> <PUBCHEM_CONFORMER_DIVERSEORDER>
+1
+
+> <PUBCHEM_MMFF94_PARTIAL_CHARGES>
+16
+10 -0.15
+11 0.15
+12 0.15
+13 0.15
+14 0.15
+15 0.15
+16 0.15
+17 0.15
+18 0.15
+3 -0.15
+4 -0.15
+5 -0.15
+6 -0.15
+7 -0.15
+8 -0.15
+9 -0.15
+
+> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>
+0
+
+> <PUBCHEM_PHARMACOPHORE_FEATURES>
+2
+6 1 2 3 4 7 8 rings
+6 1 2 5 6 9 10 rings
+
+> <PUBCHEM_HEAVY_ATOM_COUNT>
+10
+
+> <PUBCHEM_ATOM_DEF_STEREO_COUNT>
+0
+
+> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>
+0
+
+> <PUBCHEM_BOND_DEF_STEREO_COUNT>
+0
+
+> <PUBCHEM_BOND_UDEF_STEREO_COUNT>
+0
+
+> <PUBCHEM_ISOTOPIC_ATOM_COUNT>
+0
+
+> <PUBCHEM_COMPONENT_COUNT>
+1
+
+> <PUBCHEM_CACTVS_TAUTO_COUNT>
+1
+
+> <PUBCHEM_CONFORMER_ID>
+000003A300000001
+
+> <PUBCHEM_MMFF94_ENERGY>
+28.5311
+
+> <PUBCHEM_FEATURE_SELFOVERLAP>
+10.175
+
+> <PUBCHEM_SHAPE_FINGERPRINT>
+12524768 44 18340491058225958599
+12897270 3 18410574010921268037
+14325111 11 18410856563940291457
+16945 1 18410855464423129094
+17844478 74 18041292023232717737
+18185500 45 18410572898530038990
+193761 8 15744725198010753354
+19973954 147 18410858758663129568
+21040471 1 18410856551187082980
+23402655 69 18268695144457267421
+23552423 10 18261113001695881230
+241688 4 18335701589901995256
+2748010 2 18338517542164758716
+29004967 10 18335143115262090410
+369184 2 18410853261226238595
+5084963 1 18343865515182692585
+528886 8 18411132545664133339
+
+> <PUBCHEM_SHAPE_MULTIPOLES>
+205.8
+3.58
+1.69
+0.62
+0
+0
+0
+0
+0
+0
+0
+0
+0
+0
+
+> <PUBCHEM_SHAPE_SELFOVERLAP>
+452.568
+
+> <PUBCHEM_SHAPE_VOLUME>
+103
+
+> <PUBCHEM_COORDINATE_TYPE>
+2
+5
+10
+
+$$$$
+  </script>
+  <script type="text/plain" id="sdf-aspirin">
+2244
+  -OEChem-07182604433D
+
+ 21 21  0     0  0  0  0  0  0999 V2000
+    1.2333    0.5540    0.7792 O   0  0  0  0  0  0  0  0  0  0  0  0
+   -0.6952   -2.7148   -0.7502 O   0  0  0  0  0  0  0  0  0  0  0  0
+    0.7958   -2.1843    0.8685 O   0  0  0  0  0  0  0  0  0  0  0  0
+    1.7813    0.8105   -1.4821 O   0  0  0  0  0  0  0  0  0  0  0  0
+   -0.0857    0.6088    0.4403 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -0.7927   -0.5515    0.1244 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -0.7288    1.8464    0.4133 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -2.1426   -0.4741   -0.2184 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -2.0787    1.9238    0.0706 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -2.7855    0.7636   -0.2453 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -0.1409   -1.8536    0.1477 C   0  0  0  0  0  0  0  0  0  0  0  0
+    2.1094    0.6715   -0.3113 C   0  0  0  0  0  0  0  0  0  0  0  0
+    3.5305    0.5996    0.1635 C   0  0  0  0  0  0  0  0  0  0  0  0
+   -0.1851    2.7545    0.6593 H   0  0  0  0  0  0  0  0  0  0  0  0
+   -2.7247   -1.3605   -0.4564 H   0  0  0  0  0  0  0  0  0  0  0  0
+   -2.5797    2.8872    0.0506 H   0  0  0  0  0  0  0  0  0  0  0  0
+   -3.8374    0.8238   -0.5090 H   0  0  0  0  0  0  0  0  0  0  0  0
+    3.7290    1.4184    0.8593 H   0  0  0  0  0  0  0  0  0  0  0  0
+    4.2045    0.6969   -0.6924 H   0  0  0  0  0  0  0  0  0  0  0  0
+    3.7105   -0.3659    0.6426 H   0  0  0  0  0  0  0  0  0  0  0  0
+   -0.2555   -3.5916   -0.7337 H   0  0  0  0  0  0  0  0  0  0  0  0
+  1  5  1  0  0  0  0
+  1 12  1  0  0  0  0
+  2 11  1  0  0  0  0
+  2 21  1  0  0  0  0
+  3 11  2  0  0  0  0
+  4 12  2  0  0  0  0
+  5  6  1  0  0  0  0
+  5  7  2  0  0  0  0
+  6  8  2  0  0  0  0
+  6 11  1  0  0  0  0
+  7  9  1  0  0  0  0
+  7 14  1  0  0  0  0
+  8 10  1  0  0  0  0
+  8 15  1  0  0  0  0
+  9 10  2  0  0  0  0
+  9 16  1  0  0  0  0
+ 10 17  1  0  0  0  0
+ 12 13  1  0  0  0  0
+ 13 18  1  0  0  0  0
+ 13 19  1  0  0  0  0
+ 13 20  1  0  0  0  0
+M  END
+> <PUBCHEM_COMPOUND_CID>
+2244
+
+> <PUBCHEM_CONFORMER_RMSD>
+0.6
+
+> <PUBCHEM_CONFORMER_DIVERSEORDER>
+1
+11
+10
+3
+15
+17
+13
+5
+16
+7
+14
+9
+8
+4
+18
+6
+12
+2
+
+> <PUBCHEM_MMFF94_PARTIAL_CHARGES>
+18
+1 -0.23
+10 -0.15
+11 0.63
+12 0.66
+13 0.06
+14 0.15
+15 0.15
+16 0.15
+17 0.15
+2 -0.65
+21 0.5
+3 -0.57
+4 -0.57
+5 0.08
+6 0.09
+7 -0.15
+8 -0.15
+9 -0.15
+
+> <PUBCHEM_EFFECTIVE_ROTOR_COUNT>
+3
+
+> <PUBCHEM_PHARMACOPHORE_FEATURES>
+5
+1 2 acceptor
+1 3 acceptor
+1 4 acceptor
+3 2 3 11 anion
+6 5 6 7 8 9 10 rings
+
+> <PUBCHEM_HEAVY_ATOM_COUNT>
+13
+
+> <PUBCHEM_ATOM_DEF_STEREO_COUNT>
+0
+
+> <PUBCHEM_ATOM_UDEF_STEREO_COUNT>
+0
+
+> <PUBCHEM_BOND_DEF_STEREO_COUNT>
+0
+
+> <PUBCHEM_BOND_UDEF_STEREO_COUNT>
+0
+
+> <PUBCHEM_ISOTOPIC_ATOM_COUNT>
+0
+
+> <PUBCHEM_COMPONENT_COUNT>
+1
+
+> <PUBCHEM_CACTVS_TAUTO_COUNT>
+1
+
+> <PUBCHEM_CONFORMER_ID>
+000008C400000001
+
+> <PUBCHEM_MMFF94_ENERGY>
+39.5952
+
+> <PUBCHEM_FEATURE_SELFOVERLAP>
+25.432
+
+> <PUBCHEM_SHAPE_FINGERPRINT>
+1 1 18265615372930943622
+100427 49 16967750034970055351
+12138202 97 18271247217817981012
+12423570 1 16692715976000295083
+12524768 44 16753525617747228747
+12716758 59 18341332292274886536
+13024252 1 17968377969333732145
+14181834 199 17830728755827362645
+14614273 12 18262232214645093005
+15207287 21 17703787037639964108
+15775835 57 18340488876329928641
+16945 1 18271533103414939405
+193761 8 17907860604865584321
+20645476 183 17677348215414174190
+20871998 184 18198632231250704846
+21040471 1 18411412921197846465
+21501502 16 18123463883164380929
+23402539 116 18271795865171824860
+23419403 2 13539898140662769886
+23552423 10 18048876295495619569
+23559900 14 18272369794190581304
+241688 4 16179044415907240795
+257057 1 17478316999871287486
+2748010 2 18339085878070479087
+305870 269 18263645056784260212
+528862 383 18117272558388284091
+53812653 8 18410289211719108569
+7364860 26 17910392788380644719
+81228 2 18050568744116491203
+
+> <PUBCHEM_SHAPE_MULTIPOLES>
+244.06
+3.86
+2.45
+0.89
+1.95
+1.58
+0.15
+-1.85
+0.38
+-0.61
+-0.02
+0.29
+0.01
+-0.33
+
+> <PUBCHEM_SHAPE_SELFOVERLAP>
+513.037
+
+> <PUBCHEM_SHAPE_VOLUME>
+136
+
+> <PUBCHEM_COORDINATE_TYPE>
+2
+5
+10
+
+$$$$
+  </script>
+  <aside class="notes">Three molecules from rMD17 (ethanol, naphthalene, aspirin). ML potentials (MACE, DeepMD) make each force evaluation cheap, but molecular dynamics needs femtosecond-scale step sizes, so long trajectories require millions of steps — the step count, not the force cost, becomes the bottleneck. Pushing to a larger step to go faster makes the per-step discretization error accumulate along the trajectory (energy/structure drift). So: can we learn forces that stay accurate at larger step sizes, by accounting for the integrator? → ModEqLearn.</aside>
+</section>
+
+<!-- ============ SLIDE 18 — duality (RK-NN connection) ============ -->
+<section>
+  <h2>Key idea ①: Duality with learning the integrator</h2>
+  <div class="row" style="gap:30px; margin-top:.3em; align-items:flex-start">
+
+    <!-- ===== LEFT: last project — learn the INTEGRATOR (integrator purple) ===== -->
+    <div class="col center">
+      <div class="small"><strong>Last Project</strong></div>
+      <div class="small">Given a system, learn the <em>integrator</em>
+        <span class="big">\[ \min_{\Phi}\ \text{err}\big(\Phi_h,\ \varphi_{h,\boldsymbol f_{\text{true}}}\big) \]</span></div>
+      <svg class="fig" viewBox="0 0 780 392" style="width:98%;margin-top:.15em"
+           xmlns="http://www.w3.org/2000/svg" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+        <defs><marker id="Lp" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L6,3 L0,6 z" fill="#5b4ea8"/></marker></defs>
+        <!-- integrator wiring (purple = learned) -->
+        <g fill="none" stroke="#5b4ea8" stroke-width="1.6">
+          <path d="M385,354 V340 M90,340 H680"/>
+          <path d="M90,340 V314"  marker-end="url(#Lp)"/><path d="M255,340 V314" marker-end="url(#Lp)"/>
+          <path d="M420,340 V314" marker-end="url(#Lp)"/><path d="M680,340 V314" marker-end="url(#Lp)"/>
+          <path d="M138,293 H205" marker-end="url(#Lp)"/><path d="M303,293 H370" marker-end="url(#Lp)"/>
+          <path d="M468,293 H506" marker-end="url(#Lp)"/><path d="M574,293 H613" marker-end="url(#Lp)"/>
+          <path d="M90,274 V228"  marker-end="url(#Lp)"/><path d="M255,274 V228" marker-end="url(#Lp)"/>
+          <path d="M420,274 V228" marker-end="url(#Lp)"/><path d="M680,274 V228" marker-end="url(#Lp)"/>
+          <path d="M90,190 V170"  marker-end="url(#Lp)"/><path d="M255,190 V170" marker-end="url(#Lp)"/>
+          <path d="M420,190 V170" marker-end="url(#Lp)"/><path d="M680,190 V170" marker-end="url(#Lp)"/>
+          <path d="M90,132 V108 H300 V94"  marker-end="url(#Lp)"/><path d="M255,132 V94" marker-end="url(#Lp)"/>
+          <path d="M420,132 V94" marker-end="url(#Lp)"/><path d="M680,132 V108 H470 V94" marker-end="url(#Lp)"/>
+          <path d="M366,372 H34 V72 H248"  marker-end="url(#Lp)"/><path d="M404,372 H752 V72 H522" marker-end="url(#Lp)"/>
+          <path d="M385,52 V47" marker-end="url(#Lp)"/>
+        </g>
+        <!-- N_c (learned) -->
+        <rect x="250" y="52" width="270" height="40" rx="8" fill="#e8e5fd" stroke="#5b4ea8" stroke-width="1.7"/>
+        <text x="385" y="79" text-anchor="middle" font-size="22" fill="#5046a8">N<tspan baseline-shift="sub" font-size="14">c</tspan>(·;θ<tspan baseline-shift="sub" font-size="14">c</tspan>)</text>
+        <!-- k circles (learned) -->
+        <g fill="#fff" stroke="#5b4ea8" stroke-width="1.6">
+          <circle cx="90" cy="150" r="18"/><circle cx="255" cy="150" r="18"/><circle cx="420" cy="150" r="18"/><circle cx="680" cy="150" r="18"/>
+        </g>
+        <g fill="#5046a8" font-size="21" text-anchor="middle" font-style="italic">
+          <text x="90"  y="157">k<tspan baseline-shift="sub" font-size="13" font-style="normal">1</tspan></text>
+          <text x="255" y="157">k<tspan baseline-shift="sub" font-size="13" font-style="normal">2</tspan></text>
+          <text x="420" y="157">k<tspan baseline-shift="sub" font-size="13" font-style="normal">3</tspan></text>
+          <text x="680" y="157">k<tspan baseline-shift="sub" font-size="13" font-style="normal">m</tspan></text>
+        </g>
+        <text x="550" y="157" text-anchor="middle" font-size="25" fill="#5b4ea8">···</text>
+        <!-- f boxes (FIXED = gray) -->
+        <g fill="#f5f5f5" stroke="#8a8a8a" stroke-width="1.3">
+          <rect x="52" y="190" width="76" height="36" rx="6"/><rect x="217" y="190" width="76" height="36" rx="6"/>
+          <rect x="382" y="190" width="76" height="36" rx="6"/><rect x="642" y="190" width="76" height="36" rx="6"/>
+        </g>
+        <g fill="#555" font-size="27" text-anchor="middle" font-style="italic" font-weight="bold">
+          <text x="90" y="219">f</text><text x="255" y="219">f</text><text x="420" y="219">f</text><text x="680" y="219">f</text>
+        </g>
+        <!-- stage boxes: id fixed (gray), N_i learned (purple) -->
+        <rect x="42" y="274" width="96" height="38" rx="7" fill="#f5f5f5" stroke="#8a8a8a" stroke-width="1.3"/>
+        <text x="90" y="300" text-anchor="middle" font-size="22" fill="#555">id</text>
+        <g fill="#e8e5fd" stroke="#5b4ea8" stroke-width="1.5">
+          <rect x="207" y="274" width="96" height="38" rx="7"/><rect x="372" y="274" width="96" height="38" rx="7"/><rect x="615" y="274" width="130" height="38" rx="7"/>
+        </g>
+        <g fill="#5046a8" font-size="20" text-anchor="middle">
+          <text x="255" y="300">N<tspan baseline-shift="sub" font-size="13">1</tspan>(·;θ<tspan baseline-shift="sub" font-size="13">1</tspan>)</text>
+          <text x="420" y="300">N<tspan baseline-shift="sub" font-size="13">2</tspan>(·;θ<tspan baseline-shift="sub" font-size="13">2</tspan>)</text>
+          <text x="680" y="300">N<tspan baseline-shift="sub" font-size="13">m−1</tspan></text>
+        </g>
+        <text x="550" y="300" text-anchor="middle" font-size="25" fill="#5b4ea8">···</text>
+        <!-- I/O (shared, neutral) -->
+        <circle cx="385" cy="26" r="19" fill="#f5f5f5" stroke="#8a8a8a" stroke-width="1.4"/>
+        <text x="385" y="33" text-anchor="middle" font-size="21" fill="#555" font-style="italic">ŷ<tspan baseline-shift="sub" font-size="13" font-style="normal">1</tspan></text>
+        <circle cx="385" cy="372" r="19" fill="#f5f5f5" stroke="#8a8a8a" stroke-width="1.4"/>
+        <text x="385" y="379" text-anchor="middle" font-size="22" fill="#555" font-style="italic">y<tspan baseline-shift="sub" font-size="13" font-style="normal">0</tspan></text>
+      </svg>
+    </div>
+
+    <!-- ===== RIGHT: current project — learn the EQUATION f (f purple) ===== -->
+    <div class="col center fragment">
+      <div class="small"><strong>Current Project</strong></div>
+      <div class="small"> Given an integrator, learn the <em>equation</em>
+        <span class="big">\[ \min_{\boldsymbol f_\theta}\ \text{err}\big(\Phi_{h,\boldsymbol f_\theta},\ \varphi_{h,\boldsymbol f_{\text{true}}}\big) \]</span></div>
+      <svg class="fig" viewBox="0 0 780 392" style="width:98%;margin-top:.15em"
+           xmlns="http://www.w3.org/2000/svg" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+        <defs><marker id="Rg" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L6,3 L0,6 z" fill="#8a8a8a"/></marker></defs>
+        <!-- integrator wiring (FIXED = gray) -->
+        <g fill="none" stroke="#8a8a8a" stroke-width="1.4">
+          <path d="M385,354 V340 M90,340 H680"/>
+          <path d="M90,340 V314"  marker-end="url(#Rg)"/><path d="M255,340 V314" marker-end="url(#Rg)"/>
+          <path d="M420,340 V314" marker-end="url(#Rg)"/><path d="M680,340 V314" marker-end="url(#Rg)"/>
+          <path d="M138,293 H205" marker-end="url(#Rg)"/><path d="M303,293 H370" marker-end="url(#Rg)"/>
+          <path d="M468,293 H506" marker-end="url(#Rg)"/><path d="M574,293 H613" marker-end="url(#Rg)"/>
+          <path d="M90,274 V228"  marker-end="url(#Rg)"/><path d="M255,274 V228" marker-end="url(#Rg)"/>
+          <path d="M420,274 V228" marker-end="url(#Rg)"/><path d="M680,274 V228" marker-end="url(#Rg)"/>
+          <path d="M90,190 V170"  marker-end="url(#Rg)"/><path d="M255,190 V170" marker-end="url(#Rg)"/>
+          <path d="M420,190 V170" marker-end="url(#Rg)"/><path d="M680,190 V170" marker-end="url(#Rg)"/>
+          <path d="M90,132 V108 H300 V94"  marker-end="url(#Rg)"/><path d="M255,132 V94" marker-end="url(#Rg)"/>
+          <path d="M420,132 V94" marker-end="url(#Rg)"/><path d="M680,132 V108 H470 V94" marker-end="url(#Rg)"/>
+          <path d="M366,372 H34 V72 H248"  marker-end="url(#Rg)"/><path d="M404,372 H752 V72 H522" marker-end="url(#Rg)"/>
+          <path d="M385,52 V47" marker-end="url(#Rg)"/>
+        </g>
+        <!-- N_c (fixed) -->
+        <rect x="250" y="52" width="270" height="40" rx="8" fill="#f5f5f5" stroke="#8a8a8a" stroke-width="1.5"/>
+        <text x="385" y="79" text-anchor="middle" font-size="22" fill="#555">N<tspan baseline-shift="sub" font-size="14">c</tspan></text>
+        <!-- k circles (fixed) -->
+        <g fill="#fff" stroke="#8a8a8a" stroke-width="1.4">
+          <circle cx="90" cy="150" r="18"/><circle cx="255" cy="150" r="18"/><circle cx="420" cy="150" r="18"/><circle cx="680" cy="150" r="18"/>
+        </g>
+        <g fill="#555" font-size="21" text-anchor="middle" font-style="italic">
+          <text x="90"  y="157">k<tspan baseline-shift="sub" font-size="13" font-style="normal">1</tspan></text>
+          <text x="255" y="157">k<tspan baseline-shift="sub" font-size="13" font-style="normal">2</tspan></text>
+          <text x="420" y="157">k<tspan baseline-shift="sub" font-size="13" font-style="normal">3</tspan></text>
+          <text x="680" y="157">k<tspan baseline-shift="sub" font-size="13" font-style="normal">m</tspan></text>
+        </g>
+        <text x="550" y="157" text-anchor="middle" font-size="25" fill="#8a8a8a">···</text>
+        <!-- f boxes (LEARNED = purple) -->
+        <g fill="#e8e5fd" stroke="#5b4ea8" stroke-width="1.6">
+          <rect x="46" y="190" width="88" height="36" rx="6"/><rect x="211" y="190" width="88" height="36" rx="6"/>
+          <rect x="376" y="190" width="88" height="36" rx="6"/><rect x="636" y="190" width="88" height="36" rx="6"/>
+        </g>
+        <g fill="#5046a8" font-size="22" text-anchor="middle" font-style="italic" font-weight="bold">
+          <text x="90"  y="215">f<tspan baseline-shift="sub" font-size="13" font-weight="normal">θ</tspan></text>
+          <text x="255" y="215">f<tspan baseline-shift="sub" font-size="13" font-weight="normal">θ</tspan></text>
+          <text x="420" y="215">f<tspan baseline-shift="sub" font-size="13" font-weight="normal">θ</tspan></text>
+          <text x="680" y="215">f<tspan baseline-shift="sub" font-size="13" font-weight="normal">θ</tspan></text>
+        </g>
+        <!-- stage boxes (fixed) -->
+        <rect x="42" y="274" width="96" height="38" rx="7" fill="#f5f5f5" stroke="#8a8a8a" stroke-width="1.3"/>
+        <text x="90" y="300" text-anchor="middle" font-size="22" fill="#555">id</text>
+        <g fill="#f5f5f5" stroke="#8a8a8a" stroke-width="1.3">
+          <rect x="207" y="274" width="96" height="38" rx="7"/><rect x="372" y="274" width="96" height="38" rx="7"/><rect x="615" y="274" width="130" height="38" rx="7"/>
+        </g>
+        <g fill="#555" font-size="22" text-anchor="middle">
+          <text x="255" y="300">N<tspan baseline-shift="sub" font-size="14">1</tspan></text>
+          <text x="420" y="300">N<tspan baseline-shift="sub" font-size="14">2</tspan></text>
+          <text x="680" y="300">N<tspan baseline-shift="sub" font-size="14">m−1</tspan></text>
+        </g>
+        <text x="550" y="300" text-anchor="middle" font-size="25" fill="#8a8a8a">···</text>
+        <!-- I/O (shared, neutral) -->
+        <circle cx="385" cy="26" r="19" fill="#f5f5f5" stroke="#8a8a8a" stroke-width="1.4"/>
+        <text x="385" y="33" text-anchor="middle" font-size="21" fill="#555" font-style="italic">ŷ<tspan baseline-shift="sub" font-size="13" font-style="normal">1</tspan></text>
+        <circle cx="385" cy="372" r="19" fill="#f5f5f5" stroke="#8a8a8a" stroke-width="1.4"/>
+        <text x="385" y="379" text-anchor="middle" font-size="22" fill="#555" font-style="italic">y<tspan baseline-shift="sub" font-size="13" font-style="normal">0</tspan></text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 17 — modified equations ============ -->
+<section>
+  <h2>Key idea ②: modified equations</h2>
+  <ul class="small" style="margin-top:0.8em; line-height:1.7">
+    <li style="margin:1em 0"><strong>Backward error analysis:</strong> a numerical integrator exactly solves a <em>modified</em> differential equation whose field depends on the integrator <em>and</em> the step size \(h\).</li>
+  </ul>
+  <div class="small center" style="margin-top:0.2em">
+    \[ \Phi_{h,\boldsymbol f_{true}}(\boldsymbol y)=\varphi_{h,\,\mathcal{M}_{h}(\boldsymbol f_{true})}(\boldsymbol y),\qquad
+       \mathcal{M}_{h}(\boldsymbol f_{true}) = \boldsymbol f_{true} + h\,\boldsymbol f_{true}^{(1)} + h^2\,\boldsymbol f_{true}^{(2)} + \cdots \]
+  </div>
+  <ul class="small" style="margin-top:0.8em; line-height:1.7">
+    <li style="margin:1em 0"><strong>Inverse modified equation:</strong> Given the true field \(\boldsymbol f_{true}\) we want the <em>discrete map</em> to reproduce, find the field \(\boldsymbol f_\theta\) to feed the integrator so that its numerical flow <em>exactly</em> matches the true flow.</li>
+  </ul>
+  <div class="small center" style="margin-top:0.2em">
+    \[ \Phi_{h,\boldsymbol f_{\theta}}(\boldsymbol y) = \varphi_{h,\,\mathcal{M}_{h}(\boldsymbol f_{\theta})}(\boldsymbol y) \iff \varphi_{h,\,\boldsymbol f_{true}}(\boldsymbol y) \approx \Phi_{h, \mathcal{M}_{h}^{-1}(\boldsymbol f_{true})}(\boldsymbol y)\]
+  </div>
+  <p class="box center fragment" style="max-width:80%; margin:0.8em auto 0;">The integrator's “true” target \(\boldsymbol{f}_{\theta}\) is \(\mathcal{M}_{h}^{-1}(\boldsymbol f_{true})\), not \(\boldsymbol f_{true}\).</p>
+</section>
+
+<!-- ============ SLIDE 19 — method ============ -->
+<section>
+  <h2>Method: ModEqLearn</h2>
+  <!-- TOP: objective as the first line -->
+  <div class="row" style="justify-content:center; align-items:center; gap:18px; margin:.1em 0 .2em">
+    <div class="small">Train the <strong>modified equation</strong> of \(\boldsymbol f_\theta\) matches \(\boldsymbol f_{\text{true}}\):</div>
+    <div class="box alt small" style="margin:0">\[ \min_\theta\ \mathbb E_{\boldsymbol y\sim\mathcal D}\big\|\,\mathcal M_h(\boldsymbol f_\theta)(\boldsymbol y) - \boldsymbol f_{\text{true}}(\boldsymbol y)\,\big\|^2 \]</div>
+  </div>
+  <div class="small center" style="margin:.4em auto 0; max-width:92%"><strong>Data:</strong> states \(\boldsymbol y\sim\mathcal D\) sampled over the domain, each paired with the true field \(\boldsymbol f_{\text{true}}(\boldsymbol y)\).</div>
+  <!-- MIDDLE: image centered -->
+  <div class="center" style="margin-top:.55em">
+    <img class="fig" src="img/p3_overview.png" style="width:80%; max-height:330px; object-fit:contain; display:block; margin:0 auto">
+    <div class="cap" style="margin-top:10px">Classical field matching vs. modified-equation-aware training.</div>
+  </div>
+  <!-- <ul class="small" style="margin-top:.2em"> -->
+    <!-- <li>General framework via <strong>automatic differentiation</strong>; recursive modified-equation coefficients.</li>
+    <li>High-order derivative info is absorbed at <em>training</em> time → simulation stays cheap.</li> -->
+  <!-- </ul> -->
+</section>
+
+<!-- ============ SLIDE 20b — molecular case study: Hamiltonian + leapfrog + MACE ============ -->
+<section>
+  <h2>Case study: molecular dynamics <span class="tag alt">Hamiltonian · leapfrog</span></h2>
+  <div class="row top" style="margin-top:.5em">
+    <div class="col">
+      <p class="small" style="margin:.15em 0"><strong>Hamiltonian System</strong> positions \(\boldsymbol q\), momenta \(\boldsymbol p\)dynamics from partials of \(H\):</p>
+      <div class="box small" style="margin:.15em auto; max-width:85%">\[ \begin{aligned}
+        H(\boldsymbol q,\boldsymbol p)&=\tfrac12\,\boldsymbol p^\top\!\boldsymbol M^{-1}\boldsymbol p+V(\boldsymbol q)\\[3pt]
+        \dot{\boldsymbol q}&=\phantom{-}\partial_{\boldsymbol p} H=\boldsymbol M^{-1}\boldsymbol p\\[2pt]
+        \dot{\boldsymbol p}&=-\partial_{\boldsymbol q} H=-\nabla V(\boldsymbol q)
+      \end{aligned} \]</div>
+      <p class="small" style="margin:1em 0 .15em"><strong>Symplectic Leapfrog</strong> (Störmer–Verlet)</p>
+      <div class="box small" style="margin:.15em auto; max-width:85%">\[ \begin{aligned}
+        \boldsymbol p_{n+\frac12}&=\boldsymbol p_n-\tfrac{h}{2}\,\nabla V(\boldsymbol q_n)\\[1pt]
+        \boldsymbol q_{n+1}&=\boldsymbol q_n+h\,\boldsymbol M^{-1}\boldsymbol p_{n+\frac12}\\[1pt]
+        \boldsymbol p_{n+1}&=\boldsymbol p_{n+\frac12}-\tfrac{h}{2}\,\nabla V(\boldsymbol q_{n+1})
+      \end{aligned} \]</div>
+    </div>
+    <div class="col fragment">
+      <p class="small mfit" style="margin:.1em 0">Molecular ML learns the potential \(V_\theta\), \(H_\theta=T(\boldsymbol p)+V_\theta(\boldsymbol q)\), field \(\boldsymbol f_\theta=(\partial_{\boldsymbol p} H_\theta, -\partial_{\boldsymbol q} H_\theta)=(\boldsymbol M^{-1}\boldsymbol p,\,-\nabla V_\theta)\):</p>
+      <div class="box small" style="margin:.15em 0"><strong>Classical MACE</strong>: <em>pointwise</em> fit of \(V_\theta\) to energies &amp; forces:
+      \[ \min_\theta\ \textstyle\sum\big(\|E-V_\theta\|^2+\|\boldsymbol F+\nabla V_\theta\|^2\big) \]</div>
+      <div class="box alt small mini" style="margin:.15em 0"><strong>Ours (ModEqLearn)</strong>: leapfrog's <em>modified Hamiltonian</em> of \(H_\theta\):
+      \[ \tilde H^{(2)}_\theta=T(\boldsymbol p)+V_\theta+\tfrac{h^2}{24}\big(2\,\boldsymbol v^\top\nabla^2 V_\theta\,\boldsymbol v-\|\nabla V_\theta\|^2\big),\quad \boldsymbol v=\boldsymbol M^{-1}\boldsymbol p \]
+      <!-- train \(V_\theta\) &nbsp;(match field \(\equiv\) match \(\nabla H\)): -->
+      \[ \min_\theta\ \mathbb E\big\|\mathcal M_h(\boldsymbol f_\theta)-\boldsymbol f_{\text{true}}\big\|^2=\mathbb E\big\|\nabla_{(\boldsymbol q,\boldsymbol p)}\tilde H^{(2)}_\theta-\nabla_{(\boldsymbol q,\boldsymbol p)}H_{\text{true}}\big\|^2 \]</div>
+    </div>
+  </div>
+  <p class="small center fragment" style="margin-top:.25em">A perfect <em>pointwise</em> \(V_\theta\) may <strong>drift</strong> in leapfrog at large step size &nbsp;&nbsp;→&nbsp;&nbsp;<strong>the gap our work closes.</strong></p>
+</section>
+
+<!-- ============ SLIDE 21 — molecular results ============ -->
+<section>
+  <h2>Results: Stable long-time integration</h2>
+  <div class="row molecular-results">
+    <div class="col molecular-videos">
+      <div class="trajectory-grid">
+        <div class="trajectory-tile">
+          <video class="trajectory-video" controls muted loop playsinline preload="auto" aria-label="Ground-truth 3D trajectory">
+            <source src="img/video/trajectory_3d_true.mp4" type="video/mp4">
+          </video>
+          <div class="cap">Ground truth</div>
+        </div>
+        <div class="trajectory-tile">
+          <video class="trajectory-video" controls muted loop playsinline preload="auto" aria-label="Classical 3D trajectory">
+            <source src="img/video/trajectory_3d_classical.mp4" type="video/mp4">
+          </video>
+          <div class="cap">Classical</div>
+        </div>
+        <div class="trajectory-tile">
+          <video class="trajectory-video" controls muted loop playsinline preload="auto" aria-label="MACE pretrained 3D trajectory">
+            <source src="img/video/trajectory_3d_mace-pretrained.mp4" type="video/mp4">
+          </video>
+          <div class="cap">MACE pretrained</div>
+        </div>
+        <div class="trajectory-tile ours">
+          <video class="trajectory-video" controls muted loop playsinline preload="auto" aria-label="Our method 3D trajectory">
+            <source src="img/video/trajectory_3d_our-method.mp4" type="video/mp4">
+          </video>
+          <div class="cap">Our method</div>
+        </div>
+      </div>
+      <div class="cap">Ethane (C₂H₆): rollout trajectories at large step size.</div>
+    </div>
+    <div class="col molecular-plot"><img class="fig" src="img/p3_c2h6_survival.png"><div class="cap">Stable rollout survival vs. step size \(h\).</div></div>
+  </div>
+</section>
+
+<!-- ============ SLIDE 22 — C2H6 structural metric ============ -->
+<section>
+  <h2>Structural metric: bond-distance distribution</h2>
+  <div class="row c2h6-metric-slide">
+    <div class="col c2h6-metric-figure">
+      <img class="fig" src="img/p3_c2h6_hr.png">
+      <div class="cap">Staggered and eclipsed conformations define distinct interatomic-distance fingerprints.</div>
+    </div>
+    <div class="col c2h6-metric-table">
+      <table class="c2h6-table">
+        <thead>
+          <tr>
+            <th>\(h\) (fs)</th>
+            <th>Method</th>
+            <th>50 fs</th>
+            <th>100 fs</th>
+            <th>200 fs</th>
+            <th>500 fs</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td rowspan="3">0.5</td>
+            <td class="method">MACE pretrained</td>
+            <td><strong>&lt;10<sup>-4</sup></strong></td>
+            <td><strong>&lt;10<sup>-4</sup></strong></td>
+            <td><strong>&lt;10<sup>-4</sup></strong></td>
+            <td>0.107</td>
+          </tr>
+          <tr>
+            <td class="method">Classical</td>
+            <td><strong>&lt;10<sup>-4</sup></strong></td>
+            <td><strong>&lt;10<sup>-4</sup></strong></td>
+            <td>0.071</td>
+            <td><strong>0.071</strong></td>
+          </tr>
+          <tr>
+            <td class="method">Our method</td>
+            <td>0.107</td>
+            <td>0.214</td>
+            <td>0.143</td>
+            <td>0.143</td>
+          </tr>
+          <tr class="group-start">
+            <td rowspan="3">1.0</td>
+            <td class="method">MACE pretrained</td>
+            <td><strong>&lt;10<sup>-4</sup></strong></td>
+            <td><strong>&lt;10<sup>-4</sup></strong></td>
+            <td><strong>0.036</strong></td>
+            <td>0.071</td>
+          </tr>
+          <tr>
+            <td class="method">Classical</td>
+            <td><strong>&lt;10<sup>-4</sup></strong></td>
+            <td><strong>&lt;10<sup>-4</sup></strong></td>
+            <td>0.107</td>
+            <td><strong>&lt;10<sup>-4</sup></strong></td>
+          </tr>
+          <tr>
+            <td class="method">Our method</td>
+            <td>0.107</td>
+            <td>0.214</td>
+            <td>0.107</td>
+            <td>0.143</td>
+          </tr>
+          <tr class="group-start">
+            <td rowspan="3">2.5</td>
+            <td class="method">MACE pretrained</td>
+            <td>0.071</td>
+            <td>---</td>
+            <td>---</td>
+            <td>---</td>
+          </tr>
+          <tr>
+            <td class="method">Classical</td>
+            <td>---</td>
+            <td>---</td>
+            <td>---</td>
+            <td>---</td>
+          </tr>
+          <tr class="highlight">
+            <td class="method">Our method</td>
+            <td>0.036</td>
+            <td>0.143</td>
+            <td>0.071</td>
+            <td>0.179</td>
+          </tr>
+          <tr class="group-start">
+            <td rowspan="3">5.0</td>
+            <td class="method">MACE pretrained</td>
+            <td>---</td>
+            <td>---</td>
+            <td>---</td>
+            <td>---</td>
+          </tr>
+          <tr>
+            <td class="method">Classical</td>
+            <td>---</td>
+            <td>---</td>
+            <td>---</td>
+            <td>---</td>
+          </tr>
+          <tr>
+            <td class="method">Our method</td>
+            <td>---</td>
+            <td>---</td>
+            <td>---</td>
+            <td>---</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="table-note">Table 4.2: \(\Delta\psi\) for eclipsed conformation; lower is better, --- indicates blowup.</div>
+      <div class="metric-formula">
+        \[
+        \psi(r)=\frac{1}{N(N-1)}\sum_{i=1}^{N}\sum_{j\neq i}^{N}
+        \delta\!\left(r-\|\boldsymbol{x}_i-\boldsymbol{x}_j\|\right)
+        \]
+        \[
+        \Delta\psi=\int_{r_{\min}}^{r_{\max}}
+        \left|\psi_{\mathrm{pred}}(r)-\psi_{\mathrm{true}}(r)\right|\,dr
+        \]
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================================== -->
+<!-- CLOSING                                                              -->
+<!-- ===================================================================== -->
+
+<!-- ============ SLIDE 22 — synthesis + limitations ============ -->
+<section>
+  <h2>Summary</h2>
+  <div class="center" style="margin-top:.2em">
+    <svg viewBox="0 10 1020 545" style="width:98%;max-width:1090px;height:auto;display:block;margin:.05em auto 0" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+    <defs>
+    <marker id="mI" markerWidth="11" markerHeight="11" refX="7" refY="3.4" orient="auto"><path d="M0,0 L8.5,3.4 L0,6.8 z" fill="#2166ac"/></marker>
+    <marker id="mII" markerWidth="11" markerHeight="11" refX="7" refY="3.4" orient="auto"><path d="M0,0 L8.5,3.4 L0,6.8 z" fill="#5b4ea8"/></marker>
+    <marker id="mIII" markerWidth="11" markerHeight="11" refX="7" refY="3.4" orient="auto"><path d="M0,0 L8.5,3.4 L0,6.8 z" fill="#1f6f78"/></marker>
+    <marker id="mdu" markerWidth="11" markerHeight="11" refX="7" refY="3.4" orient="auto"><path d="M0,0 L8.5,3.4 L0,6.8 z" fill="#b5546a"/></marker>
+    <marker id="mdu2" markerWidth="11" markerHeight="11" refX="1.5" refY="3.4" orient="auto"><path d="M8.5,0 L0,3.4 L8.5,6.8 z" fill="#b5546a"/></marker>
+    </defs>
+    <rect x="316" y="233" width="388" height="108" rx="16" fill="#f4f6f6" stroke="#9fb0b2" stroke-width="1.8"/>
+    <text x="510.0" y="269" text-anchor="middle" font-size="23" font-weight="700" fill="#22303a">Dynamical system → trajectory</text>
+    <text x="510.0" y="299" text-anchor="middle" font-size="16.5" fill="#22303a">learn <tspan font-weight="700" fill="#22303a">one</tspan> structured component;</text>
+    <text x="510.0" y="322" text-anchor="middle" font-size="16.5" fill="#22303a">keep the classical rest — <tspan font-weight="700" fill="#1f6f78">guarantees</tspan></text>
+    <g class="fragment" data-fragment-index="1">
+    <path d="M510.0,204.0 L510.0,229.0" fill="none" stroke="#2166ac" stroke-width="3" marker-end="url(#mI)"/>
+    <circle cx="510" cy="118" r="84" fill="#ffffff" stroke="#2166ac" stroke-width="3.4"/>
+    <text x="510" y="73" text-anchor="middle" font-size="13" fill="#22303a" font-weight="600" letter-spacing=".4">Part I</text>
+    <text x="510" y="100" text-anchor="middle" font-size="25" font-weight="700" fill="#2166ac">PK-NN</text>
+    <text x="510" y="125" text-anchor="middle" font-size="14" fill="#22303a">learns the</text>
+    <text x="510" y="148" text-anchor="middle" font-size="18.5" font-weight="700" fill="#2166ac">representation</text>
+    <text x="510" y="170" text-anchor="middle" font-size="12.5" fill="#22303a">(Koopman)</text>
+    <text x="510" y="26" text-anchor="middle" font-size="18.5" fill="#22303a" paint-order="stroke" stroke="#fff" stroke-width="4" stroke-linejoin="round">learn coordinates → keep it <tspan font-weight="700" fill="#2166ac">linear</tspan></text>
+    </g>
+    <g class="fragment" data-fragment-index="2">
+    <path d="M240.2,410.3 L388.2,342.7" fill="none" stroke="#5b4ea8" stroke-width="3" marker-end="url(#mII)"/>
+    <circle cx="162" cy="446" r="84" fill="#ffffff" stroke="#5b4ea8" stroke-width="3.4"/>
+    <text x="162" y="401" text-anchor="middle" font-size="13" fill="#22303a" font-weight="600" letter-spacing=".4">Part II</text>
+    <text x="162" y="428" text-anchor="middle" font-size="25" font-weight="700" fill="#5b4ea8">RK-NN</text>
+    <text x="162" y="453" text-anchor="middle" font-size="14" fill="#22303a">learns the</text>
+    <text x="162" y="476" text-anchor="middle" font-size="18.5" font-weight="700" fill="#5b4ea8">integrator</text>
+    <text x="162" y="498" text-anchor="middle" font-size="12.5" fill="#22303a">(per family)</text>
+    <text x="162" y="550" text-anchor="middle" font-size="18.5" fill="#22303a" paint-order="stroke" stroke="#fff" stroke-width="4" stroke-linejoin="round">learn coefficients → keep the <tspan font-weight="700" fill="#5b4ea8">order</tspan></text>
+    </g>
+    <g class="fragment" data-fragment-index="3">
+    <path d="M779.8,410.3 L631.8,342.7" fill="none" stroke="#1f6f78" stroke-width="3" marker-end="url(#mIII)"/>
+    <circle cx="858" cy="446" r="84" fill="#ffffff" stroke="#1f6f78" stroke-width="3.4"/>
+    <text x="858" y="401" text-anchor="middle" font-size="13" fill="#22303a" font-weight="600" letter-spacing=".4">Part III</text>
+    <text x="858" y="428" text-anchor="middle" font-size="25" font-weight="700" fill="#1f6f78">ModEqLearn</text>
+    <text x="858" y="453" text-anchor="middle" font-size="14" fill="#22303a">learns the</text>
+    <text x="858" y="476" text-anchor="middle" font-size="18.5" font-weight="700" fill="#1f6f78">equation</text>
+    <text x="858" y="498" text-anchor="middle" font-size="12.5" fill="#22303a">(integrator-aware)</text>
+    <text x="858" y="550" text-anchor="middle" font-size="18.5" fill="#22303a" paint-order="stroke" stroke="#fff" stroke-width="4" stroke-linejoin="round">learn the field → keep it <tspan font-weight="700" fill="#1f6f78">symplectic</tspan></text>
+    </g>
+    <g class="fragment" data-fragment-index="4">
+    <path d="M248.0,446.0 Q510,522 772.0,446.0" fill="none" stroke="#b5546a" stroke-width="3" marker-end="url(#mdu)" marker-start="url(#mdu2)"/>
+    <text x="510" y="505" text-anchor="middle" font-size="16" fill="#22303a" paint-order="stroke" stroke="#fff" stroke-width="4.5" stroke-linejoin="round"><tspan font-weight="700" fill="#b5546a" font-size="18">duality</tspan>  ·  tune the scheme ⇄ tune the equation</text>
+    </g>
+    </svg>
+  </div>
+  <aside class="notes">Three works = three components of computing a dynamical system (system to trajectory). Part I / PK-NN learns the representation (Koopman) - keeps linear evolution in the lifted space; Part II / RK-NN learns the integrator - keeps consistency / order; Part III / ModEqLearn learns the equation (integrator-aware) - keeps geometric / symplectic structure. Connection: II and III are dual - you close the same discrete-map vs true-flow gap by tuning the scheme (II) or the equation (III), via modified equations. Limitations: value depends on whether the chosen structure fits the problem - Koopman scaling K(u) to very high dimensions, RK-NN generalization outside training, ModEqLearn still ongoing. Future: long-time molecular simulation, rare-event & conformational dynamics, nonlinear prediction & control - where better computational structure yields better scientific conclusions.</aside>
+</section>
+
+</div>
+<div id="pagenum" class="hidden"></div>
+</div>
+
+<!-- reveal.js + plugins (CDN) -->
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/math/math.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+<!-- dev only: generated line map for Cmd+click -> jump to source (see slide_map.js) -->
+<script src="slide_lines.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: false,
+    transition: 'slide',
+    width: 1280,
+    height: 720,
+    margin: 0.045,
+    center: false,
+    pdfSeparateFragments: false,
+    controls: true,
+    progress: true,
+    plugins: [ RevealMath.MathJax3, RevealNotes ],
+    math: {
+      mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-svg.js',
+      tex: { inlineMath: [['\\(','\\)']], displayMath: [['\\[','\\]']] },
+      // inline each glyph as a path instead of referencing a shared <use> cache —
+      // fixes the intermittent glyph dropout when reveal scales the stage.
+      svg: { fontCache: 'none' }
+    }
+  });
+
+  // Custom page numbering: the cover and section-divider pages are NOT counted.
+  // Content slides are numbered consecutively, skipping cover & dividers.
+  (function () {
+    var el = document.getElementById('pagenum');
+    var sections = Array.prototype.slice.call(
+      document.querySelectorAll('.reveal .slides > section'));
+    // a slide counts if it's neither the cover (.title-slide) nor a divider (.divider)
+    var counts = sections.map(function (s) {
+      return !s.classList.contains('title-slide')
+          && !s.classList.contains('divider')
+          && !s.classList.contains('nonum');
+    });
+    var total = counts.filter(Boolean).length;
+    // precompute the displayed number for each section (cumulative count of counted slides)
+    var nums = []; var run = 0;
+    counts.forEach(function (c) { run += c ? 1 : 0; nums.push(c ? run : 0); });
+
+    function update() {
+      var idx = Reveal.getIndices().h;
+      if (!counts[idx]) {            // cover or divider → no number
+        el.classList.add('hidden');
+      } else {
+        el.textContent = nums[idx] + ' / ' + total;
+        el.classList.remove('hidden');
+      }
+    }
+    Reveal.on('ready', update);
+    Reveal.on('slidechanged', update);
+  })();
+
+  // A local button reveals comparison steps one by one (does not use slide navigation).
+  // Revealed steps persist across slide navigation (no reset), so returning keeps them shown.
+  (function () {
+    document.querySelectorAll('.stepbtn').forEach(function (btn) {
+      var box = btn.closest('.clicksteps');
+      btn.addEventListener('click', function () {
+        var hidden = Array.prototype.slice.call(box.querySelectorAll('.step:not(.shown)'));
+        hidden.sort(function (a, b) { return (+a.dataset.step) - (+b.dataset.step); });
+        if (hidden.length) hidden[0].classList.add('shown');
+        if (box.querySelectorAll('.step:not(.shown)').length === 0) {
+          btn.classList.add('done');
+          btn.textContent = '✓ comparison';
+        }
+      });
+    });
+  })();
+
+  // Mitigate GPU-compositing dropouts of math / SVG after fullscreen or window resize:
+  // force one repaint of the scaled slides layer once the new layout settles.
+  (function () {
+    function repaint() {
+      var s = document.querySelector('.reveal .slides');
+      if (!s) return;
+      s.style.opacity = '0.999';
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () { s.style.opacity = ''; });
+      });
+    }
+    document.addEventListener('fullscreenchange', function () { setTimeout(repaint, 250); });
+    document.addEventListener('webkitfullscreenchange', function () { setTimeout(repaint, 250); });
+    var t; window.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(repaint, 250); });
+  })();
+
+  // dev only: Cmd+click a slide -> open its <section> at the right line in VS Code.
+  // Needs the generated slide_lines.js (run `node slide_map.js`, or `--watch`).
+  // Uses the baked absolute path, so it works via file:// AND a localhost Live Server.
+  // No-ops when slide_lines.js is absent (e.g. a production deploy), so it's safe to ship.
+  (function () {
+    var file = window.SLIDE_FILE, lines = window.SLIDE_LINES;
+    if (!file || !lines) return;
+    var tops = Array.prototype.slice.call(
+      document.querySelectorAll('.reveal .slides > section'));
+    document.addEventListener('click', function (e) {
+      if (!e.metaKey) return;                              // require Cmd
+      var sec = e.target.closest && e.target.closest('section');
+      while (sec && tops.indexOf(sec) === -1) sec = sec.parentElement.closest('section');
+      var line = lines[sec ? tops.indexOf(sec) : -1];
+      if (!line) return;
+      e.preventDefault(); e.stopPropagation();
+      window.location.href = 'vscode://file' + file + ':' + line + ':1';
+    }, true);
+    console.log('%c[dev] Cmd+click any slide to open its source line in VS Code',
+                'color:#5046A8;font-weight:bold');
+  })();
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/3Dmol/2.4.2/3Dmol-min.js"></script>
+<script>
+(function(){
+  function initMols(){
+    if(!window.$3Dmol) return;
+    ['ethanol','naphthalene','aspirin'].forEach(function(id){
+      var host=document.getElementById('mol-'+id), data=document.getElementById('sdf-'+id);
+      if(!host||!data) return;
+      if(!host._v){
+        var v=$3Dmol.createViewer(host,{backgroundColor:'white',preserveDrawingBuffer:true});
+        v.addModel(data.textContent.trim(),'sdf');
+        v.setStyle({},{stick:{radius:0.13},sphere:{scale:0.27}});
+        v.zoomTo(); v.rotate(22,'x'); v.spin('y',1); v.render(); host._v=v;
+      } else { host._v.resize(); host._v.render(); }
+    });
+  }
+  window._initMols=initMols;
+  if(window.Reveal && Reveal.on){
+    Reveal.on('slidechanged', function(e){
+      if(e.currentSlide && e.currentSlide.querySelector('.molviewer')) initMols();
+    });
+    Reveal.on('ready', function(e){
+      if(e.currentSlide && e.currentSlide.querySelector('.molviewer')) initMols();
+    });
+  }
+})();
+</script>
+</body>
+</html>
